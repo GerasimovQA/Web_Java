@@ -24,8 +24,8 @@ public class GlobalPage {
     public static String NameFileShowPassword = "ShowPassword";
 
 
-    public static String LoginAUT = "admin";
-    public static String PasswordAUT = "qwe123";
+    public static String LoginAUT = "login";
+    public static String PasswordAUT = "password";
 
 
     @FindBy(css = ".el-input__inner[placeholder=\"Введите логин, email или телефон\"]")
