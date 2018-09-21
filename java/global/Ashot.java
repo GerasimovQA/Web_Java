@@ -42,13 +42,19 @@ public class Ashot extends GlobalPage {
 
             System.out.println("Различие снимков в пикселях: " + diff.getDiffSize());
 
-            if (diff.getDiffSize() > pix) {
+            if (diff.getDiffSize() >= pix) {
                 File diffFile = new File(diffDir + nameFile + ".png");
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);
+                expectedFile.delete();
+                actualFile.delete();
+//                diffFile.delete();
             } else {
                 File diffFile = new File(diffDir + nameFile + ".png");
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);
-                throw new AssertionError("Слишком маленькая разница в пикселях, скорее всего, скрытие пароля не работает");
+                expectedFile.delete();
+                actualFile.delete();
+//                diffFile.delete();
+                throw new AssertionError("Слишком маленькая разница в пикселях");
             }
         } catch (IOException e) {
             e.printStackTrace();

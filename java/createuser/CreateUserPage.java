@@ -3,7 +3,6 @@ package createuser;
 import global.GlobalPage;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -82,34 +81,6 @@ public class CreateUserPage extends GlobalPage {
 
 //-----------------------------------------------------
 
-    //ГЛАВНАЯ СТРАНИЦА
-    //Пункт меню Сотрудники
-    @FindBy(xpath = "//p[contains (text(), \"Сотрудники\")]")
-    public WebElement menuWorkers;
-
-    //Подпункт меню Создать сотрудника
-    @FindBy(xpath = "//span[contains (text(), \"Создать сотрудника\")]")
-    public WebElement menuCreateWorker;
-
-    //   Кнопка список сотрудников с проверкой на текст "Список сотрудников"
-    @FindBy(xpath = "//Span[text()= \"Список сотрудников\"]")
-    public WebElement buttonUserList;
-
-    //   Выпадающий список "Количество сотрудников на странице"
-    @FindBy(css = ".el-input__inner[placeholder=\"Выбрать\"]")
-    public WebElement sumWorker;
-
-    //   Выпадающий пункт "50 на странице" в списке "Количество сотрудников на странице"
-    @FindBy(xpath = "/html/body/div[3]/div[1]/div[1]/ul/li[2]")
-    public WebElement workers50;
-
-
-    //   Список фамилий сотрудников
-    @FindBy(xpath = "//tr/td[4]/div")
-    public WebElement listSecondName;
-
-//-----------------------------------------------------
-
     //ШАГ №1
     //    Поле ввода логина с проверкой на текст "Логин"
     @FindBy(css = ".el-input__inner[placeholder=\"Логин\"]")
@@ -167,9 +138,13 @@ public class CreateUserPage extends GlobalPage {
     //-------------------------------------------------------
 
     //ШАГ 2 - Специальность и место работы
-    //Выпадающий список "Выберите место работы"
-    @FindBy(css = ".el-input__inner[placeholder=\"Выберите место работы\"]")
-    public WebElement selectWorkspace;
+    //Выпадающий список "Структура организации"
+    @FindBy(xpath = "//div[contains (text(),\"Структура организации\")]")
+    public WebElement selectStructureOrganization;
+
+    //Головная организация в выпадающем списке "Структура организации"
+    @FindBy(xpath = "//div[1]/div[2]/div[1]/div/label/span/span")
+    public WebElement selectMainOrganization;
 
     //Поле ввода "Должность"
     @FindBy(css = ".el-input__inner[placeholder=\"Должность\"]")
@@ -179,9 +154,17 @@ public class CreateUserPage extends GlobalPage {
     @FindBy(css = ".el-input__inner[placeholder=\"Роль сотрудника\"]")
     public WebElement selectWorkerRole;
 
+    //Пункт "Специалист" в выпадающем списке "Роль сотрудника"
+    @FindBy(xpath = "//span[contains (text(),\"Специалист\")]")
+    public WebElement selectWorkerRoleSpecialist;
+
     //Выпадающий список "Специальность"
     @FindBy(css = ".el-input__inner[placeholder=\"Специальность\"]")
     public WebElement selectWorkerSpecialty;
+
+    //Пункт "Хирург" в  выпадающем списке "Специальность"
+    @FindBy(xpath = ".//span[contains (text(),\"Хирург\")]")
+    public WebElement selectWorkerSpecialtySurgeon;
 
     //   Проверка успешного перехода на ШАГ №3 фразой содержащей текст "Оказываемые услуги "
     @FindBy(xpath = "//div[contains (text(), \"Оказываемые услуги\")]")
@@ -378,15 +361,15 @@ public class CreateUserPage extends GlobalPage {
 //        selectWS.selectByVisibleText("Лор");
 
 
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div/div[1]/div[2]/div/input")))).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//span[contains (text(), \"Больница 1\")]")))).click();
-        waitE_ClickableAndSendKeys(inputWorkerPosition, "Доктор");
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div/div[1]/div[4]/div/input")))).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//span[contains (text(), \"Специалист\")]")))).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("html/body/div[1]/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/input")))).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//span[contains (text(), \"Лор\")]")))).click();
+        waitE_ClickableAndClick(selectStructureOrganization);
+        waitE_ClickableAndClick(selectMainOrganization);
+        waitE_ClickableAndSendKeys(inputWorkerPosition, "Докторелло");
+        waitE_ClickableAndClick(selectWorkerRole);
+        waitE_ClickableAndClick(selectWorkerRoleSpecialist);
+        waitE_ClickableAndClick(selectWorkerSpecialty);
+        waitE_ClickableAndClick(selectWorkerSpecialtySurgeon);
         waitE_ClickableAndClick(buttonAddUser);
-        waitE_evisibilityOf(successSecondThree);
+        waitE_visibilityOf(successSecondThree);
     }
 
     public void stepThree() {
@@ -464,18 +447,18 @@ public class CreateUserPage extends GlobalPage {
         System.out.println(Other + " = " + saveOther.getText());
 
         waitE_ClickableAndClick(buttonFinish);
-        waitE_evisibilityOf(successCreate);
+        waitE_visibilityOf(successCreate);
     }
 
     public void createUserStepSix(String Login, String Email, String Phone, String Password, String SecondName, String FirstName, String MiddleName, String Education, String EmailInfo, String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber, String Facebook, String Other) {
         waitE_ClickableAndClick(buttonUserList);
-        waitE_evisibilityOf(listSecondName);
+        waitE_visibilityOf(listSecondName);
 //        sleep(2000);
 //        scrollWithOffset(sumWorker, 0, -50);
 //        waitE_ClickableAndClick(sumWorker);
 //        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", sumWorker);
 //        moveMouse(sumWorker);
-//        waitE_evisibilityOf(workers50);
+//        waitE_visibilityOf(workers50);
 //        moveMouse(workers50);
 //        waitE_ClickableAndClick(workers50);
         WebElement findToSecondName = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4]/div[contains (text(), \"" + SecondName + "\")]")));
