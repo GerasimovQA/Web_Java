@@ -84,7 +84,10 @@ public class CreateOrgnizationLogic {
     }
 
     public void stepTwoCreateOrganization() {
-        page.waitE_ClickableAndClick(page.chekboxOrganizationServicesConsultations);
+        page.waitE_ClickableAndClick(page.checkServices1);
+        page.waitE_ClickableAndClick(page.checkServices2);
+        page.waitE_ClickableAndClick(page.checkServices3);
+        page.waitE_ClickableAndClick(page.checkServices4);
         page.waitE_ClickableAndClick(page.buttonAddOrganizationStep2);
     }
 
@@ -350,7 +353,6 @@ public class CreateOrgnizationLogic {
             System.out.println("Условия оказания помощи не найдены и это хорошо");
         }
 
-
         try {
             Assert.assertTrue("Найдены профиль организации", !page.checkProfileOrganization.isEnabled());
         } catch (NoSuchElementException e) {
@@ -412,83 +414,4 @@ public class CreateOrgnizationLogic {
         }
         throw new AssertionError("Созданная организация НЕ найдена в списке всех организаций");
     }
-
-//
-//    public void stepOneWithoutInfoToEmail(String Login, String Email, String Phone, String Password,
-//                                          String SecondName, String FirstName, String MiddleName, String Education,
-//                                          String EmailInfo, String PhoneInfo, String Instagram, String Vk,
-//                                          String Whatsapp, String Viber, String Facebook, String Other, String
-// Photo) {
-//        page.createUserStepOneBase(Login, Email, Phone, Password, SecondName, FirstName, MiddleName);
-//        page.waitE_ClickableAndClick(page.checkboxInfoToEmail);
-//        page.waitE_ClickableAndClick(page.buttonAddUser);
-//        page.waitE_visibilityOf(page.successSecondStep);
-//        page.stepTwo();
-//        page.stepThree();
-//        page.createUserStepFourBase(Education, EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other,
-//                Photo);
-//        page.createUserStepFive(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education,
-//                EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-//        page.createUserStepSix(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education, EmailInfo
-//                , PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-//        try {
-//            if (page.labelSuperadministrator.isEnabled()) {
-//                throw new AssertionError("У простого юзера присутствует метка \"Суперадминистратор\"");
-//            }
-//        } catch (NoSuchElementException e) {
-//            System.out.println("Все хорошо, метка \"Суперадминистратор\" не найдена");
-//        }
-//    }
-//
-//    public void stepOneWithInfoToEmail(String Login, String Email, String Phone, String Password, String SecondName,
-//                                       String FirstName, String MiddleName, String Education, String EmailInfo,
-//                                       String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber,
-//                                       String Facebook, String Other, String Photo) {
-////        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
-//        page.createUserStepOneBase(Login, Email, Phone, Password, SecondName, FirstName, MiddleName);
-//        page.waitE_ClickableAndClick(page.switchSuperadmin);
-//        page.waitE_ClickableAndClick(page.buttonAddUser);
-//        page.waitE_visibilityOf(page.successSecondStep);
-//        page.stepTwo();
-//        page.stepThree();
-//        page.createUserStepFourBase(Education, EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other,
-//                Photo);
-//        page.createUserStepFive(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education,
-//                EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-//        page.createUserStepSix(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education, EmailInfo
-//                , PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-//        page.waitE_visibilityOf(page.labelSuperadministrator);
-//        System.out.println("Все хорошо, метка \"Суперадминистратор\" найдена");
-//    }
-//
-//
-//    public void stepOneGeneratePassword() {
-////        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
-//        page.waitE_ClickableAndClick(page.menuWorkers);
-//        page.waitE_ClickableAndClick(page.menuCreateWorker);
-//        String Pass = "kozaybra";
-//        page.waitE_ClickableAndSendKeys(page.inputPassword, Pass);
-//        for (int i = 0; i < 10; i++) {
-//            page.waitE_ClickableAndClick(page.generatePassword);
-//            String PassGen = page.inputPassword.getAttribute("value");
-//            Assert.assertTrue("Пароль не поменялся или null", !Pass.equals(PassGen) || !PassGen.equals(""));
-//            Pass = PassGen;
-//            System.out.println(PassGen);
-//        }
-//    }
-//
-//    public void stepOneShowPassword() {
-//        Ashot.screenshot(driver, GlobalPage.ScreenshotAshot, 200);
-//        page.waitE_ClickableAndClick(page.notShowPassword);
-//        page.sleep(1000);
-//        Ashot.screenshot(driver, GlobalPage.ScreenshotAshot, 200);
-////        File fileExpected = new File(GlobalPage.expectedDir + GlobalPage.ScreenshotAshot + ".png");
-////        File fileActual = new File(GlobalPage.actualDir + GlobalPage.ScreenshotAshot + ".png");
-////        File filediff = new File(GlobalPage.diffDir + GlobalPage.ScreenshotAshot + ".png");
-////        fileExpected.delete();
-////        fileActual.delete();
-////        filediff.delete();
-//    }
-
-
 }

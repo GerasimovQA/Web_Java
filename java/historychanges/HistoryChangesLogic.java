@@ -1,6 +1,6 @@
 package historychanges;
 
-import global.EnvironmentLogic;
+import global.EnvironmentUser;
 import global.GlobalPage;
 import junitparams.JUnitParamsRunner;
 import org.junit.Assert;
@@ -14,12 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import utils.ConfigProperties;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
 @RunWith(JUnitParamsRunner.class)
 public class HistoryChangesLogic {
@@ -119,8 +113,8 @@ public class HistoryChangesLogic {
     public void logCreate(String Login, String Password, String Email, String Phone, String Status, String SecondName
             , String FirstName, String MiddleName, String Superuser) {
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         String NowDate = page.nowDate();
         page.waitE_ClickableAndClick(page.menuWorkers);
@@ -150,12 +144,12 @@ public class HistoryChangesLogic {
     public void logEditWorker(String NewLogin, String NewEmail, String NewPhone, String Login, String Password,
                               String Email, String Phone, String Status, String SecondName, String FirstName,
                               String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
 
         int i = -1;
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.linkEditAuthProfile);
         page.waitE_ClickableAndSendKeys(page.inputLogin, NewLogin);
         page.waitE_ClickableAndSendKeys(page.inputEmail, NewEmail);
@@ -225,8 +219,8 @@ public class HistoryChangesLogic {
 
     public void popoverInfoBlock(String Login, String Email, String Phone, String Password, String Status,
                                  String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         System.out.println("1");
         page.waitE_ClickableAndClick(page.listActionProfile);
@@ -258,9 +252,6 @@ public class HistoryChangesLogic {
     }
 
     public void moreInfoBlockLogin() {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
         page.waitE_ClickableAndClick(page.menuWorkers);
         page.waitE_ClickableAndClick(page.buttonUserList);
@@ -288,18 +279,7 @@ public class HistoryChangesLogic {
 
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -316,25 +296,12 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
     }
 
     public void moreInfoBlockLogout() {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
         page.waitE_ClickableAndClick(page.menuWorkers);
         page.waitE_ClickableAndClick(page.buttonUserList);
@@ -361,18 +328,7 @@ public class HistoryChangesLogic {
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -389,16 +345,6 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
@@ -409,14 +355,11 @@ public class HistoryChangesLogic {
                                     String Ref, String Role, String Status, String Specialities, String Regalia,
                                     String EmailCont, String PhoneCont, String Instagram, String Vk, String Whatsapp,
                                     String Viber, String Facebook, String Other) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status,
                 SecondName, FirstName, MiddleName, Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Post, Ref, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Post, Ref, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         page.waitE_ClickableAndClick(page.menuWorkers);
         page.waitE_ClickableAndClick(page.buttonUserList);
@@ -442,18 +385,7 @@ public class HistoryChangesLogic {
                                 & !page.blockMoreInfoContextDeviceValue.getText().equals("") & !page.blockMoreInfoContextIPValue.getText().equals("")
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -482,16 +414,6 @@ public class HistoryChangesLogic {
                                 page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
@@ -499,12 +421,9 @@ public class HistoryChangesLogic {
 
     public void moreInfoBlockChange(String Login, String Password, String Email, String Phone, String Status,
                                     String SecondName, String FirstName, String MiddleName, String Superuser) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         page.waitE_ClickableAndClick(page.menuWorkers);
         page.waitE_ClickableAndClick(page.buttonUserList);
@@ -530,18 +449,7 @@ public class HistoryChangesLogic {
                                 & !page.blockMoreInfoContextDeviceValue.getText().equals("") & !page.blockMoreInfoContextIPValue.getText().equals("")
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -558,16 +466,6 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
@@ -825,8 +723,8 @@ public class HistoryChangesLogic {
     }
 
     public void allReportToYearAPI() {
-        EnvironmentLogic.login();
-        EnvironmentLogic.BigDataAPI();
+        EnvironmentUser.login();
+        EnvironmentUser.BigDataAPI();
     }
 
 
@@ -836,7 +734,7 @@ public class HistoryChangesLogic {
         String NowDate = page.nowDate();
         int i = -1;
 
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.columnTime.get(0));
         Assert.assertTrue(page.columnTime.size() > 0);
@@ -867,7 +765,7 @@ public class HistoryChangesLogic {
         String NowDate = page.nowDate();
         page.waitE_visibilityOf(page.authInputLogin);
         page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.sleep(3000);
         Assert.assertTrue(page.columnTime.size() > 0);
@@ -893,11 +791,11 @@ public class HistoryChangesLogic {
                               String SecondName
             , String FirstName, String MiddleName, String Superuser) {
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         String NowDate = page.nowDate();
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         Assert.assertTrue(page.columnTime.size() > 0);
         for (WebElement timeOne : page.columnTime) {
@@ -922,12 +820,12 @@ public class HistoryChangesLogic {
     public void logEditWorkerUser(String NewLogin, String NewEmail, String NewPhone, String Login, String Password,
                                   String Email, String Phone, String Status, String SecondName, String FirstName,
                                   String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
 
         int i = -1;
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.linkEditAuthProfile);
         page.waitE_ClickableAndSendKeys(page.inputLogin, NewLogin);
         page.waitE_ClickableAndSendKeys(page.inputEmail, NewEmail);
@@ -935,7 +833,7 @@ public class HistoryChangesLogic {
         page.waitE_ClickableAndClick(page.buttonSaveProfile);
         String NowDate = page.nowDate();
         page.waitE_ClickableAndClick(page.menuWorkers);
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         Assert.assertTrue(page.columnTime.size() > 0);
         for (WebElement timeOne : page.columnTime) {
@@ -956,7 +854,7 @@ public class HistoryChangesLogic {
     }
 
     public void logSumReportsDefoulteUser(String SecondName) {
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         System.out.println("Количество строк: " + page.columnAction.size());
         Assert.assertTrue("Количество записей по-умолчанию не равно 10", page.columnAction.size() == 10);
@@ -964,7 +862,7 @@ public class HistoryChangesLogic {
 
     public void logLoadMoreUserUser(String SecondName) {
         int i = -1;
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
 
         for (int x = 0; x < 10; x++) {
@@ -979,8 +877,8 @@ public class HistoryChangesLogic {
 
     public void popoverInfoBlockUser(String Login, String Email, String Phone, String Password, String Status,
                                      String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         System.out.println("1");
         page.waitE_ClickableAndClick(page.listActionProfile);
@@ -988,7 +886,7 @@ public class HistoryChangesLogic {
         driver.get(ConfigProperties.getTestProperty("baseurl"));
         page.auth(Login, Password);
         System.out.println("2");
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         System.out.println("3");
         page.sleep(1000);
@@ -1010,11 +908,8 @@ public class HistoryChangesLogic {
     }
 
     public void moreInfoBlockLoginUser(String SecondName) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
 
         for (int x = 0; x < 4; x++) {
@@ -1038,18 +933,7 @@ public class HistoryChangesLogic {
 
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -1066,27 +950,14 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
     }
 
     public void moreInfoBlockLogoutUser(String SecondName) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
 
         for (int x = 0; x < 4; x++) {
@@ -1109,18 +980,7 @@ public class HistoryChangesLogic {
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -1137,16 +997,6 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
@@ -1159,18 +1009,13 @@ public class HistoryChangesLogic {
                                         String EmailCont, String PhoneCont, String Instagram, String Vk,
                                         String Whatsapp,
                                         String Viber, String Facebook, String Other) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
-        List fileList ;
-
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status,
                 SecondName, FirstName, MiddleName, Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Post, Ref, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Post, Ref, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
 
         for (int x = 0; x < 4; x++) {
@@ -1191,24 +1036,10 @@ public class HistoryChangesLogic {
                         !page.blockMoreInfoContextIDValue.getText().equals("")
                                 & !page.blockMoreInfoContextDeviceValue.getText().equals("") & !page.blockMoreInfoContextIPValue.getText().equals("")
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
+
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-
-
-
-                try {
-//                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                    Clip = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                    System.out.println(Clip);
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
+
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -1237,16 +1068,6 @@ public class HistoryChangesLogic {
                                 page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
@@ -1254,14 +1075,11 @@ public class HistoryChangesLogic {
 
     public void moreInfoBlockChangeUser(String Login, String Password, String Email, String Phone, String Status,
                                         String SecondName, String FirstName, String MiddleName, String Superuser) {
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String Clip = "";
-        String Clip2 = "";
         int i = -1;
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
 
         for (int x = 0; x < 4; x++) {
@@ -1282,19 +1100,9 @@ public class HistoryChangesLogic {
                         !page.blockMoreInfoContextIDValue.getText().equals("")
                                 & !page.blockMoreInfoContextDeviceValue.getText().equals("") & !page.blockMoreInfoContextIPValue.getText().equals("")
                                 & page.blockMoreInfoContextButtonMoreInfo.isEnabled() & page.blockMoreInfoContextButtonCopyLink.isEnabled());
-                page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                System.out.println("Содержимое буфера обмена:" + Clip);
-                Assert.assertTrue(Clip.contains("/users/history/"));
+                page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonMoreInfo);
-                Assert.assertTrue(driver.getCurrentUrl().contains("/users/history/"));
 
                 page.waitE_visibilityOf(page.blockMoreInfoContextIDValue);
                 System.out.println("Дата: " + page.blocInfoAboutEventDate.getText());
@@ -1311,23 +1119,13 @@ public class HistoryChangesLogic {
                                 !page.blockMoreInfoContextIPValue.getText().equals("") & page.blockMoreInfoContextButtonCopyLink.isEnabled());
 
                 page.waitE_ClickableAndClick(page.blockMoreInfoContextButtonCopyLink);
-                try {
-                    Clip2 = c.getData(DataFlavor.stringFlavor).toString();
-                } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Содержимое буфера обмена2:" + Clip2);
-                Assert.assertTrue(Clip.equals(Clip));
-
                 return;
             }
         }
     }
 
     public void popoverUser(String SecondName) {
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.sleep(1000);
         page.waitE_ClickableAndClick(page.questionInitiator);
@@ -1352,7 +1150,7 @@ public class HistoryChangesLogic {
         int SumAction4case5 = 0; int SumAction5case5 = 0;
 
         int i = -1;
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_ClickableAndClick(page.inputAction);
         page.sleep(1000);
@@ -1534,7 +1332,7 @@ public class HistoryChangesLogic {
     public void actionFilterCalendarUser(String SecondName) {
         int i = -1;
 
-        page.moveToProfile(SecondName);
+        page.moveToProfileUser(SecondName);
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_ClickableAndClick(page.calendar);
         page.waitE_ClickableAndClick(page.calendarToday);
@@ -1574,8 +1372,8 @@ public class HistoryChangesLogic {
     }
 
     public void allReportToYearAPIUser() {
-        EnvironmentLogic.login();
-        EnvironmentLogic.BigDataAPI();
+        EnvironmentUser.login();
+        EnvironmentUser.BigDataAPI();
     }
 
 }

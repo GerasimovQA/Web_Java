@@ -92,6 +92,6 @@ public class AutorizationLogic {
 //    public static void beforClass() {
 //
 //                //        TestEnvironmentTest.environment();
-////        EnvironmentLogic.createUserAPI();
+////        EnvironmentUser.createUserAPI();
 //    }
 }

@@ -49,37 +49,6 @@ public class CreateOrgnizationPage extends GlobalPage {
     @FindBy(css = ".el-input__inner[placeholder=\"Сокращенное название\"]")
     public WebElement inputOrganizationNameAbbr;
 
-    //   Кнопка "Поиск сотрудника"
-    @FindBy(xpath = "//button/span[text()= \"Поиск сотрудника\"]")
-    public WebElement buttonEmployeeSearch;
-
-    //Поле ввода "Фамилия" в поиске руководителя организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Фамилия\"]")
-    public WebElement inputSecondNameDirectorOrganization;
-
-    //Поле ввода "Имя" в поиске руководителя организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Имя\"]")
-    public WebElement inputFirstNameDirectorOrganization;
-
-    //Поле ввода "Отчество" в поиске руководителя организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Отчество\"]")
-    public WebElement inputMiddleNameDirectorOrganization;
-
-    //   Кнопка "Поиск" в поиске руководителя организации
-    @FindBy(xpath = "//button/span[text()= \"Поиск\"]")
-    public WebElement buttonSearch;
-
-    //   Кнопка "Сбросить" в поиске руководителя организации
-    @FindBy(xpath = "//Span[contains (text(), \"Сбросить\")]")
-    public WebElement buttonReset;
-
-    //   Фотография руководителя организации
-    @FindBy(xpath = "//td[1]/div/div/img")
-    public WebElement photoDirecor;
-
-    //   ФИО найденного руководителя организации
-    @FindBy(xpath = "//tr/td[2]/div")
-    public WebElement FIODirecor;
 
     //   СПИСОК найденных руководителей организации
     @FindBy(xpath = "//tr/td[2]/div")
@@ -101,14 +70,9 @@ public class CreateOrgnizationPage extends GlobalPage {
     @FindBy(xpath = "//div[5]/div[2]")
     public WebElement FIOAssignedDirecor;
 
-    //   Буллет головной организации "ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский Университет)"
-    @FindBy(xpath = "//div[contains (text(), \"ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский " +
-            "Университет)\")]/../label")
-    public WebElement bulletHeadOrganization;
 
-    //Выпадающий список "Условия оказания помощи" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Условия\"]")
-    public WebElement selectOrganizationConditions;
+
+
 
     //Поле ввода "Профиль" организации
     @FindBy(css = ".el-input__inner[placeholder=\"Профиль\"]")
@@ -121,9 +85,21 @@ public class CreateOrgnizationPage extends GlobalPage {
 //-------------------------------------------------------------------------------------------------------------------
 
     // Шаг 2 - Услуги
-    //Чек-бокс "Консультации"
-    @FindBy(xpath = "//div/span[text()=\"Консультации\"]/../label")
-    public WebElement chekboxOrganizationServicesConsultations;
+    //Услуга "Консультации врачей, отдельные манипуляции"
+    @FindBy(xpath = "//span[contains (text(),\"Консультации врачей, отдельные манипуляции\")]")
+    public WebElement checkServices1;
+
+    //Услуга "Услуги оказываемые в отделениях"
+    @FindBy(xpath = "//span[contains (text(),\"Услуги оказываемые в отделениях\")]")
+    public WebElement checkServices2;
+
+    //Услуга "Стоимость койко-дня в отделениях"
+    @FindBy(xpath = "//span[contains (text(),\"Стоимость койко-дня в отделениях\")]")
+    public WebElement checkServices3;
+
+    //Чек-бокс Услуги "Койко-день в общей палате, 1650 руб"
+    @FindBy(xpath = "//span[contains (text(),\"Койко-день в общей палате, 1650 руб\")]/../label")
+    public WebElement checkServices4;
 
     //Кнопка "Добавить подразделение" Шаг2
     @FindBy(xpath = "//div[2]/button[3]/span[contains (text(), \"Добавить подразделение\")]")
@@ -169,41 +145,6 @@ public class CreateOrgnizationPage extends GlobalPage {
     @FindBy(xpath = "//span[contains (text(), \"Уточнить\")]")
     public WebElement clarifyAdress;
 
-    // Поле ввода "Email" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Email\"]")
-    public WebElement inputEmail;
-
-    //  Поле ввода "Vk" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Vk\"]")
-    public WebElement inputVk;
-
-    //  Поле ввода "Facebook" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Facebook\"]")
-    public WebElement inputFacebook;
-
-    //  Поле ввода "Instagram" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Instagram\"]")
-    public WebElement inputInstagram;
-
-    //  Поле ввода "Другое" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Другое\"]")
-    public WebElement inputOther;
-
-    //  Поле ввода "Код подразделения" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Код подразделения\"]")
-    public WebElement inputCode;
-
-    //  Поле ввода "Реестровый номер ОМС" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Реестровый номер ОМС\"]")
-    public WebElement inputRegistryNumber;
-
-    //  Поле ввода "Идентификатор ПУМП" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Идентификатор ПУМП\"]")
-    public WebElement inputIdentifierPUMP;
-
-    //  Поле ввода "Идентификатор ОМС" организации
-    @FindBy(css = ".el-input__inner[placeholder=\"Идентификатор ОМС\"]")
-    public WebElement inputIdentifierOMS;
 
     //Кнопка "Пропустить" Шаг3
     @FindBy(xpath = "//div[3]/button[2]/span[contains (text(), \"Пропустить\")]")
@@ -429,7 +370,7 @@ public class CreateOrgnizationPage extends GlobalPage {
 //
 //    //Пункт "Хирург" в  выпадающем списке "Специальность"
 //    @FindBy(xpath = ".//span[contains (text(),\"Хирург\")]")
-//    public WebElement selectWorkerSpecialtySurgeon;
+//    public WebElement selectWorkerSpecialtyMed;
 //
 //    //   Проверка успешного перехода на ШАГ №3 фразой содержащей текст "Оказываемые услуги "
 //    @FindBy(xpath = "//div[contains (text(), \"Оказываемые услуги\")]")
@@ -634,7 +575,7 @@ public class CreateOrgnizationPage extends GlobalPage {
 //        waitE_ClickableAndClick(selectWorkerRole);
 //        waitE_ClickableAndClick(selectWorkerRoleSpecialist);
 //        waitE_ClickableAndClick(selectWorkerSpecialty);
-//        waitE_ClickableAndClick(selectWorkerSpecialtySurgeon);
+//        waitE_ClickableAndClick(selectWorkerSpecialtyMed);
 //        waitE_ClickableAndClick(buttonAddUser);
 //        waitE_visibilityOf(successSecondThree);
 //    }

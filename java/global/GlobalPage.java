@@ -3,17 +3,13 @@ package global;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.ConfigProperties;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class GlobalPage {
@@ -27,6 +23,11 @@ public class GlobalPage {
 
     public static String LoginAUT = "ioanner";
     public static String PasswordAUT = "12345678";
+
+
+    // Body
+    @FindBy(xpath = "  //html/body")
+    public WebElement body;
 
 
     @FindBy(css = ".el-input__inner[placeholder=\"Введите логин, email или телефон\"]")
@@ -65,8 +66,15 @@ public class GlobalPage {
     @FindBy(css = ".el-input__inner[placeholder=\"Выбрать\"]")
     public WebElement sumWorker;
 
+
+//    //  Блок с вариантами количества показанных юзеров
+//    @FindBy(xpath = "/html/body/div[3]/div[1]/div[1]/ul[@class=\"el-scrollbar__view el-select-dropdown__list\"]")
+//    public WebElement listSumWorker;
+
+
     //   Выпадающий пункт "50 на странице" в списке "Количество сотрудников на странице"
-    @FindBy(xpath = "/html/body/div[2]/div[1]/div[1]/ul/li[2]/span[contains (text(), \"50 на странице\")]")
+    @FindBy(css = "body > div.el-select-dropdown.el-popper > div.el-scrollbar > div.el-select-dropdown__wrap" +
+            ".el-scrollbar__wrap > ul > li:nth-child(3)")
     public WebElement workers50;
 
     //   Список фамилий сотрудников
@@ -141,6 +149,122 @@ public class GlobalPage {
     //    Логин
     @FindBy(xpath = "//div[contains (text(), \"Логин\")]/following-sibling::div")
     public WebElement loginProfile;
+    //-----------------------------------------------Организации------------------------------------------------------------
+    //Пункт меню Организации
+    @FindBy(xpath = "//p[contains (text(), \"Организация\")]")
+    public WebElement menuOrganizations;
+
+    //   Кнопка список организаций с проверкой на текст "Список сотрудников"
+    @FindBy(xpath = "//Span[text()= \"Список подразделений\"]")
+    public WebElement buttonOrganizationsList;
+
+    //   Список Названий организаци
+    @FindBy(xpath = "//*[@id=\"pane-list\"]//div[1][@class=\"dep-tree__cell\"]")
+    public WebElement listNameOrganizations;
+
+    // Кнопка "Ред. подразделение"
+    @FindBy(xpath = "//span[contains (text(),\"Ред. подразделение\")]")
+    public WebElement buttonEditOrganization;
+
+    //   Кнопка "Поиск сотрудника"
+    @FindBy(xpath = "//button/span[text()= \"Поиск сотрудника\"]")
+    public WebElement buttonEmployeeSearch;
+
+    //Поле ввода "Фамилия" в поиске руководителя организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Фамилия\"]")
+    public WebElement inputSecondNameDirectorOrganization;
+
+    //Поле ввода "Имя" в поиске руководителя организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Имя\"]")
+    public WebElement inputFirstNameDirectorOrganization;
+
+    //Поле ввода "Отчество" в поиске руководителя организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Отчество\"]")
+    public WebElement inputMiddleNameDirectorOrganization;
+
+    //   Кнопка "Поиск" в поиске руководителя организации
+    @FindBy(xpath = "//button/span[text()= \"Поиск\"]")
+    public WebElement buttonSearch;
+
+    //   Кнопка "Сбросить" в поиске руководителя организации
+    @FindBy(xpath = "//Span[contains (text(), \"Сбросить\")]")
+    public WebElement buttonReset;
+
+    //   ФИО найденного руководителя организации
+    @FindBy(xpath = "//tr/td[2]/div")
+    public WebElement FIODirecor;
+
+    //   Фотография руководителя организации
+    @FindBy(xpath = "//td[1]/div/div/img")
+    public WebElement photoDirecor;
+
+    //   Буллет головной организации "ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский Университет)"
+    @FindBy(xpath = "//div[contains (text(), \"ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский " +
+            "Университет)\")]/../label")
+    public WebElement bulletHeadOrganization;
+
+    //   Наименование головной организации "ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский
+    // Университет)"
+    @FindBy(xpath = "//div[contains (text(), \"ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский " +
+            "Университет)\")]")
+    public WebElement NameHeadOrganization;
+
+    //   Наименование "Стоматологический центр"
+    @FindBy(xpath = "//div[contains (text(), \"Стоматологический центр\")]")
+    public WebElement NameDentalCenter;
+
+    //   Наименование "Отделение терапевтической стоматологии"
+    @FindBy(xpath = "//div[contains (text(), \"Отделение терапевтической стоматологии\")]")
+    public WebElement NameDepartmentTherapeuticStomatology;
+
+    //   Наименование "Технический отдел"
+    @FindBy(xpath = "//div[contains (text(), \"Технический отдел\")]")
+    public WebElement NameTechnicalDepartment;
+
+    //   Буллет "Второе неврологическое отделение"
+    @FindBy(xpath = "//div[contains (text(), \"Второе неврологическое отделение\")]/../label")
+    public WebElement bulletSecondNeurologicalDepartment;
+
+
+    //Выпадающий список "Условия оказания помощи" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Условия\"]")
+    public WebElement selectOrganizationConditions;
+
+    //  Поле ввода "Vk" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Vk\"]")
+    public WebElement inputVk;
+
+    //  Поле ввода "Facebook" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Facebook\"]")
+    public WebElement inputFacebook;
+
+    //  Поле ввода "Instagram" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Instagram\"]")
+    public WebElement inputInstagram;
+
+    //  Поле ввода "Другое" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Другое\"]")
+    public WebElement inputOther;
+
+    //  Поле ввода "Другие" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Другие\"]")
+    public WebElement inputOthers;
+
+    //  Поле ввода "Код подразделения" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Код подразделения\"]")
+    public WebElement inputCode;
+
+    //  Поле ввода "Реестровый номер ОМС" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Реестровый номер ОМС\"]")
+    public WebElement inputRegistryNumber;
+
+    //  Поле ввода "Идентификатор ПУМП" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Идентификатор ПУМП\"]")
+    public WebElement inputIdentifierPUMP;
+
+    //  Поле ввода "Идентификатор ОМС" организации
+    @FindBy(css = ".el-input__inner[placeholder=\"Идентификатор ОМС\"]")
+    public WebElement inputIdentifierOMS;
 
 
     public WebDriver driver;
@@ -148,24 +272,24 @@ public class GlobalPage {
 
     public void waitE_ClickableAndClick(WebElement element) {
         sleep(500);
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         iWait.until(ExpectedConditions.visibilityOf(element)).click();
     }
 
     public void waitE_ClickableAndSendKeys(WebElement element, String text) {
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         element.clear();
         iWait.until(ExpectedConditions.elementToBeClickable(element)).sendKeys(text);
     }
 
     public void waitE_visibilityOf(WebElement element) {
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         iWait.until(ExpectedConditions.visibilityOf(element));
         sleep(500);
     }
 
     public void waitE_invisibilityOf(WebElement element) {
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         try {
 
             iWait.until(ExpectedConditions.invisibilityOf(element));
@@ -177,15 +301,15 @@ public class GlobalPage {
 
     public String waitE_visibilityOfAndGettext(WebElement element) {
         sleep(500);
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         iWait.until(ExpectedConditions.visibilityOf(element));
-            String text = element.getText();
+        String text = element.getText();
         return text;
     }
 
     public String waitE_TextPresent(WebElement element, String phrase) {
         sleep(500);
-        WebDriverWait iWait = new WebDriverWait(driver, 15);
+        WebDriverWait iWait = new WebDriverWait(driver, 10);
         iWait.until(ExpectedConditions.textToBePresentInElement(element, phrase));
         String text = element.getText();
         System.out.println(element.getText() + " ====== " + phrase);
@@ -230,7 +354,6 @@ public class GlobalPage {
     }
 
 
-
     public void scrollWithOffset(WebElement webElement, int x, int y) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String code = "window.scroll(" + (webElement.getLocation().x + x) + ","
@@ -253,28 +376,47 @@ public class GlobalPage {
         screenFailedTest(Name);
     }
 
-    public void moveToProfileChange(String SecondName) {
+    public void moveToProfileUserChange(String SecondName) {
         waitE_ClickableAndClick(menuWorkers);
         waitE_ClickableAndClick(buttonUserList);
         waitE_visibilityOf(listSecondName);
         waitE_ClickableAndClick(sumWorker);
+//        waitE_visibilityOf(listSumWorker);
+//        waitE_ClickableAndClick(listSumWorker);
         waitE_ClickableAndClick(workers50);
-        WebElement findToSecondName = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4]/div[contains (text(), \"" + SecondName + "\")]")));
+        WebElement findToSecondName =
+                new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4" +
+                        "]/div[contains (text(), \"" + SecondName + "\")]")));
         scrollWithOffset(findToSecondName, 0, 30);
         waitE_ClickableAndClick(findToSecondName);
         waitE_ClickableAndClick(buttonChangeProfile);
         waitE_visibilityOf(firstNameProfile);
     }
 
-    public void moveToProfile(String SecondName) {
+    public void moveToProfileUser(String SecondName) {
         waitE_ClickableAndClick(menuWorkers);
         waitE_ClickableAndClick(buttonUserList);
         waitE_visibilityOf(listSecondName);
         waitE_ClickableAndClick(sumWorker);
         waitE_ClickableAndClick(workers50);
-        WebElement findToSecondName = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4]/div[contains (text(), \"" + SecondName + "\")]")));
+        WebElement findToSecondName =
+                new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4" +
+                        "]/div[contains (text(), \"" + SecondName + "\")]")));
         scrollWithOffset(findToSecondName, 0, 30);
         waitE_ClickableAndClick(findToSecondName);
+    }
+
+    public void moveToProfileOrg(String NameOrganization) {
+        waitE_ClickableAndClick(menuOrganizations);
+        waitE_ClickableAndClick(buttonOrganizationsList);
+        waitE_visibilityOf(listNameOrganizations);
+        WebElement findToNameOrganization =
+                new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[1" +
+                        "][@class=\"dep-tree__cell\"][contains (text(), \"" + NameOrganization + "\")]/../div/a/span" +
+                        "[contains (text(),\"Подробнее\")]")));
+        scrollWithOffset(findToNameOrganization, 0, 30);
+        waitE_ClickableAndClick(findToNameOrganization);
+        waitE_ClickableAndClick(buttonEditOrganization);
     }
 
     public void writeCookiesToFile(WebDriver driver) {
@@ -292,12 +434,12 @@ public class GlobalPage {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            System.out.println("Ошибка при записи куки - "+ e.getLocalizedMessage());
+            System.out.println("Ошибка при записи куки - " + e.getLocalizedMessage());
         }
     }
 
     public Cookie readCookiesFromFile() {
-        Cookie cookie = new Cookie("","");
+        Cookie cookie = new Cookie("", "");
         try {
             File file = new File("browser.dat");
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -310,16 +452,16 @@ public class GlobalPage {
                     String domain = str.nextToken();
                     String path = str.nextToken();
                     Date expiry = null;
-                    String date= str.nextToken();
+                    String date = str.nextToken();
                     if (!(date).equals("null")) {
-                        expiry = new Date(System.currentTimeMillis()*2);
+                        expiry = new Date(System.currentTimeMillis() * 2);
                     }
                     boolean isSecure = new Boolean(str.nextToken()).booleanValue();
                     cookie = new Cookie(name, value, domain, path, expiry, isSecure);
                 }
             }
         } catch (Exception ex) {
-            System.out.println("Ошибка при чтении куки - "+ ex.getLocalizedMessage());
+            System.out.println("Ошибка при чтении куки - " + ex.getLocalizedMessage());
         }
         return cookie;
     }

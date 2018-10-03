@@ -1,6 +1,6 @@
 package edituser;
 
-import global.EnvironmentLogic;
+import global.EnvironmentUser;
 import junitparams.Parameters;
 import org.junit.Test;
 
@@ -15,8 +15,8 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerFioTest(String NewSecondName, String NewFirstName, String NewMiddleName, String Login,
                                   String Password, String Email, String Phone, String Status, String SecondName,
                                   String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerFio(SecondName, NewSecondName, NewFirstName, NewMiddleName);
     }
@@ -29,8 +29,8 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerFioCancelTest(String NewSecondName, String NewFirstName, String NewMiddleName, String Login
             , String Password, String Email, String Phone, String Status, String SecondName, String FirstName,
                                         String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerFioCancel(SecondName, NewSecondName, NewFirstName, NewMiddleName);
     }
@@ -44,8 +44,8 @@ public class EditUserTest extends EditUserLogic {
                                                   String Status,
                                                   String SecondName, String FirstName, String MiddleName,
                                                   String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerFioDeleteMiddlename(SecondName);
     }
@@ -59,8 +59,8 @@ public class EditUserTest extends EditUserLogic {
                                                         String Status,
                                                         String SecondName, String FirstName, String MiddleName,
                                                         String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerFioDeleteMiddlenameCancel(SecondName);
     }
@@ -75,8 +75,8 @@ public class EditUserTest extends EditUserLogic {
                                                String Password, String Email, String Phone, String Status,
                                                String SecondName, String FirstName, String MiddleName,
                                                String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerLoginEmailPhone(SecondName, NewLogin, NewEmail, NewPhone);
     }
@@ -90,8 +90,8 @@ public class EditUserTest extends EditUserLogic {
                                                     String Password, String Email, String Phone, String Status,
                                                     String SecondName, String FirstName, String MiddleName,
                                                     String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerLoginEmailPhoneCancel(SecondName, NewLogin, NewEmail, NewPhone);
     }
@@ -106,8 +106,8 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerPasswordTest(String NewPassword, String Login, String Password, String Email, String Phone,
                                        String Status, String SecondName, String FirstName, String MiddleName,
                                        String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerPassword(SecondName, Login, NewPassword);
     }
@@ -120,8 +120,8 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerPasswordCancelTest(String NewPassword, String Login, String OldPassword, String Email,
                                              String Phone, String Status, String SecondName, String FirstName,
                                              String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, OldPassword, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, OldPassword, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerPasswordCancel(SecondName, Login, OldPassword, NewPassword);
     }
@@ -133,8 +133,8 @@ public class EditUserTest extends EditUserLogic {
     })
     public void editWorkerPasswordShowPasswordTest(String NewPassword, String Login, String OldPassword, String Email
             , String Phone, String Status, String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Email, Phone, OldPassword, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Email, Phone, OldPassword, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerPasswordShowPassword(SecondName, NewPassword);
     }
@@ -145,8 +145,8 @@ public class EditUserTest extends EditUserLogic {
     })
     public void editWorkerStatusTest(String Login, String Password, String Email, String Phone, String Status,
                                      String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerStatus(SecondName);
     }
@@ -158,8 +158,8 @@ public class EditUserTest extends EditUserLogic {
     })
     public void editWorkerStatusCancelTest(String Login, String Password, String Email, String Phone, String Status,
                                            String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         editWorkerStatusCancel(SecondName);
     }
@@ -173,10 +173,10 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerPhotoTest(String Login, String Password, String Email, String Phone, String Status,
                                     String SecondName, String FirstName, String MiddleName, String Superuser,
                                     String Photo, String NewPhoto) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.uploadPhotoUserAPI(Photo);
+        EnvironmentUser.uploadPhotoUserAPI(Photo);
         editWorkerPhoto(SecondName, NewPhoto);
     }
 
@@ -188,10 +188,10 @@ public class EditUserTest extends EditUserLogic {
     public void editWorkerPhotoCancelTest(String Login, String Password, String Email, String Phone, String Status,
                                           String SecondName, String FirstName, String MiddleName, String Superuser,
                                           String Photo, String NewPhoto) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.uploadPhotoUserAPI(Photo);
+        EnvironmentUser.uploadPhotoUserAPI(Photo);
         editWorkerPhotoCancel(SecondName, NewPhoto);
     }
 
@@ -209,10 +209,10 @@ public class EditUserTest extends EditUserLogic {
                                         String Cost, String IDchild, String Regalia, String EmailCont,
                                         String PhoneCont, String Instagram, String Vk, String Whatsapp, String Viber,
                                         String Facebook, String Other) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         editWorkerEducation(SecondName, NewEducation);
     }
@@ -232,10 +232,10 @@ public class EditUserTest extends EditUserLogic {
                                               String LabelChild, String Cost, String IDchild, String Regalia,
                                               String EmailCont, String PhoneCont, String Instagram, String Vk,
                                               String Whatsapp, String Viber, String Facebook, String Other) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         editWorkerEducationCancel(SecondName, NewEducation);
     }
@@ -261,10 +261,10 @@ public class EditUserTest extends EditUserLogic {
                                                           String PhoneCont, String Instagram, String Vk,
                                                           String Whatsapp, String Viber, String Facebook,
                                                           String Other) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Ref, Post, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         editWorkerCommunicationMethodsProfile(SecondName, NewEmailContact, NewPhoneContact, NewInstagram, NewVk,
                 NewWhatsapp, NewViber, NewFacebook, NewOther);
@@ -273,7 +273,7 @@ public class EditUserTest extends EditUserLogic {
     @Test   //3.19
     @Parameters(value = {
             "13al666@mail.ru | +7 (236) 578-65-65 | http://instagram2.com | http://Vk2/.ru | 9517532189 | 12345678910" +
-                    " | http://Facebook2.com | Good-Ква%821_ | SLnjdsafdGI | nbdf54590d8fidwds | 046dsy9" +
+                    " | http://Facebook2.com | Good-Ква%821_    | SLnjdsafdGI | nbdf54590d8fidwds | 046dsy9" +
                     ".kjasfs-sdk@gmail.com | +7 (902) 090-35-81 | active | Щукина | Щука | Щуковна | true | " +
                     "Сеченовский университет > Больница 1 | Ref | Врач | Специалист| Дантист | Консультации | 0 | " +
                     "Консультация доцента | 3000 руб. | 1 | Какое уже есть | qua@mail.ru | 7954357543 | INSTA | VK | " +
@@ -294,10 +294,10 @@ public class EditUserTest extends EditUserLogic {
                                                                     String PhoneCont, String Instagram, String Vk,
                                                                     String Whatsapp, String Viber, String Facebook,
                                                                     String Other) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        EnvironmentLogic.profileUserAPI(Depart, Ref, Post, Status, Role, Specialities, Regalia, EmailCont, PhoneCont,
+        EnvironmentUser.profileUserAPI(Depart, Ref, Post, Status, Role, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         editWorkerCommunicationMethodsProfileCancel(SecondName, NewEmailContact, NewPhoneContact, NewInstagram, NewVk
                 , NewWhatsapp, NewViber, NewFacebook, NewOther);
@@ -305,20 +305,26 @@ public class EditUserTest extends EditUserLogic {
 
     @Test   //3.20
     @Parameters(value = {
-            "SLnjefwdGI | nbdf545idwds | 046dsasfs-sdk@gmail.com | +7 (952) 090-37-81 | active | Мистеров | " +
-                    "Мистер | Мистерович | true | | |  | | Дантист | | | | | | Какое уже есть | " +
-                    "qua@mail.ru | 7954357543 | INSTA | VK | WATSAPP | VIBER | FACEBOOK | OTHER",
+            "Врачелло | ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский Университет)       | " +
+                    "87IjkSLnjdsafdGI | nb4df54590ddwds | 046.kjasfdk@gmail.com | +7 (147) 090-35-81 | active | " +
+                    "Мистеров |" +
+                    " Мистер | Мистерович | true | Сеченовский университет > Больница 1 | Ref | Врач | Специалист| " +
+                    "Дантист" +
+                    " | Консультации | 0 | Консультация доцента | 3000 руб. | 1 | Какое уже есть | qua@mail.ru | " +
+                    "7954357543 | INSTA | VK | WATSAPP | VIBER | FACEBOOK | OTHER",
     })
-    public void editWorkerWorkplaces(String Login, String Password, String Email, String Phone, String Status,
+    public void editWorkerWorkplaces(String NewPost, String NewDepart, String Login, String Password, String Email, String Phone, String Status,
                                      String SecondName, String FirstName, String MiddleName, String Superuser,
                                      String Depart, String Ref, String Post, String Role, String Specialities,
                                      String Label, String ID, String LabelChild, String Cost, String IDchild,
                                      String Regalia, String EmailCont, String PhoneCont, String Instagram, String Vk,
                                      String Whatsapp, String Viber, String Facebook, String Other) {
-        EnvironmentLogic.login();
-        EnvironmentLogic.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.login();
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        editWorkerWorkplaces(SecondName, Post);
+        EnvironmentUser.profileUserAPI(Depart, Ref, Post, Status, Role, Specialities, Regalia, EmailCont, PhoneCont,
+                Instagram, Vk, Whatsapp, Viber, Facebook, Other);
+        editWorkerWorkplaces(SecondName, NewPost, NewDepart);
     }
 
 

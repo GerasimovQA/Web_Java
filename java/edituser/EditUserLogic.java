@@ -14,11 +14,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import sun.net.www.http.KeepAliveCache;
 import utils.ConfigProperties;
 
 import java.io.File;
-import java.security.Key;
 
 @RunWith(JUnitParamsRunner.class)
 public class EditUserLogic {
@@ -54,7 +52,7 @@ public class EditUserLogic {
     };
 
     public void editWorkerFio(String SecondName, String NewSecondName, String NewFirstName, String NewMiddleName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Secondname = page.secondNameProfile.getText();
         System.out.println("Существующая фамилия: " + Secondname);
 
@@ -84,7 +82,7 @@ public class EditUserLogic {
 
     public void editWorkerFioCancel(String SecondName, String NewSecondName, String NewFirstName,
                                     String NewMiddleName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Secondname = page.secondNameProfile.getText();
         System.out.println("Существующая фамилия: " + Secondname);
 
@@ -111,7 +109,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerFioDeleteMiddlename(String SecondName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Secondname = page.secondNameProfile.getText();
         System.out.println("Существующая фамилия: " + Secondname);
 
@@ -147,7 +145,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerFioDeleteMiddlenameCancel(String SecondName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Secondname = page.secondNameProfile.getText();
         System.out.println("Существующая фамилия: " + Secondname);
 
@@ -174,7 +172,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerLoginEmailPhone(String SecondName, String NewLogin, String NewEmail, String NewPhone) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Login = page.loginProfile.getText();
         System.out.println("Существующий логин: " + Login);
 
@@ -204,7 +202,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerLoginEmailPhoneCancel(String SecondName, String NewLogin, String NewEmail, String NewPhone) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Login = page.loginProfile.getText();
         System.out.println("Существующий логин: " + Login);
 
@@ -234,7 +232,7 @@ public class EditUserLogic {
 
 
     public void editWorkerPassword(String SecondName, String Login, String NewPassword) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.linkEditPasswordProfile);
         page.waitE_ClickableAndSendKeys(page.inputNewPassword, NewPassword);
         page.waitE_ClickableAndSendKeys(page.inputRepeatNewPassword, NewPassword);
@@ -254,7 +252,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerPasswordCancel(String SecondName, String Login, String OldPassword, String NewPassword) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.linkEditPasswordProfile);
         page.waitE_ClickableAndSendKeys(page.inputNewPassword, NewPassword);
         page.waitE_ClickableAndSendKeys(page.inputRepeatNewPassword, NewPassword);
@@ -267,7 +265,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerPasswordShowPassword(String SecondName, String NewPassword) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.linkEditPasswordProfile);
         page.waitE_ClickableAndSendKeys(page.inputNewPassword, NewPassword);
         page.waitE_ClickableAndSendKeys(page.inputRepeatNewPassword, NewPassword);
@@ -283,7 +281,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerStatus(String SecondName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Status = page.statusProfile.getText();
         System.out.println("Status= " + Status);
         page.waitE_ClickableAndClick(page.linkEditStatusProfile);
@@ -308,7 +306,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerStatusCancel(String SecondName) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         String Status = page.statusProfile.getText();
         System.out.println("Status= " + Status);
         page.waitE_ClickableAndClick(page.linkEditStatusProfile);
@@ -329,7 +327,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerPhoto(String SecondName, String Photo) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
         page.waitE_visibilityOf(page.photoProfile);
         Ashot.screenshot(driver, GlobalPage.ScreenshotAshot, 10000);
@@ -342,7 +340,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerPhotoCancel(String SecondName, String Photo) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
         page.waitE_visibilityOf(page.photoProfile);
         page.scrollUpPage();
@@ -356,7 +354,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerEducation(String SecondName, String NewEducation) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
 
         String Education = page.educationProfile.getText();
@@ -372,7 +370,7 @@ public class EditUserLogic {
     }
 
     public void editWorkerEducationCancel(String SecondName, String NewEducation) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
 
         String Education = page.educationProfile.getText();
@@ -391,7 +389,7 @@ public class EditUserLogic {
                                                       String NewPhoneContact, String NewInstagram, String NewVk,
                                                       String NewWhatsapp, String NewViber, String NewFacebook,
                                                       String NewOther) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
 
         String EmailContact = page.emailContactProfile.getText();
@@ -462,7 +460,7 @@ public class EditUserLogic {
     public void editWorkerCommunicationMethodsProfileCancel(String SecondName, String NewEmailContact,
                                                             String NewPhoneContact, String NewInstagram, String NewVk
             , String NewWhatsapp, String NewViber, String NewFacebook, String NewOther) {
-        page.moveToProfileChange(SecondName);
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistData);
 
         String EmailContact = page.emailContactProfile.getText();
@@ -527,18 +525,33 @@ public class EditUserLogic {
         Assert.assertTrue(page.otherContactProfile.getText().equals(OtherContact));
     }
 
-    public void editWorkerWorkplaces(String SecondName, String Post) {
-        page.moveToProfileChange(SecondName);
+    public void editWorkerWorkplaces(String SecondName, String NewPost, String NewDepart) {
+        page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistWorkpaleces);
         page.waitE_ClickableAndClick(page.linkEditWorkplaces);
-        page.waitE_ClickableAndClick(page.linkAddWorkplaces);
         page.waitE_ClickableAndClick(page.structureOrganizations);
-        page.waitE_ClickableAndClick(page.headOrganization);
         page.waitE_ClickableAndClick(page.bulletHeadOrganization);
-        page.waitE_ClickableAndSendKeys(page.inputPosition, Post);
+        page.waitE_ClickableAndSendKeys(page.inputPosition, NewPost);
         page.waitE_ClickableAndClick(page.inputRoleEmployee);
-        page.waitE_ClickableAndClick(page.RoleEmployeeSpecialist);
-        page.waitE_ClickableAndClick(page.buttonSaveWorkplaces);
+        page.waitE_ClickableAndClick(page.roleEmployeeSpecialist);
+        page.waitE_ClickableAndClick(page.buttonSaveWorkplace);
+        page.waitE_visibilityOf(page.workplace);
+
+        System.out.println(page.workplace.getText() + " = " + NewDepart);
+        Assert.assertTrue(page.workplace.getText().equals(NewDepart));
+
+        System.out.println(page.post.getText() + " = " + NewPost);
+        Assert.assertTrue(page.post.getText().equals(NewPost));
+
+        System.out.println(page.role.getText() + " = " + "Хирург");
+        Assert.assertTrue(page.role.getText().equals("Хирург"));
+
+        page.waitE_ClickableAndClick(page.linkEditSpecialty);
+        page.waitE_ClickableAndClick(page.listSpecialty);
+        page.waitE_ClickableAndClick(page.specialtySurgeon);
+        page.waitE_ClickableAndClick(page.buttonSaveSpecialty);
+
+
     }
 }
 

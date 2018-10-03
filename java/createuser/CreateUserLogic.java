@@ -13,8 +13,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import utils.ConfigProperties;
 
-import java.io.File;
-
 @RunWith(JUnitParamsRunner.class)
 public class CreateUserLogic {
 
@@ -71,16 +69,17 @@ public class CreateUserLogic {
 //    }
 
 
-    public void stepOneWithoutInfoToEmail(String Login, String Email, String Phone, String Password,
-                                          String SecondName, String FirstName, String MiddleName, String Education,
-                                          String EmailInfo, String PhoneInfo, String Instagram, String Vk,
-                                          String Whatsapp, String Viber, String Facebook, String Other, String Photo) {
+    public void createUserWithoutInfoToEmail(String Login, String Email, String Phone, String Password,
+                                             String SecondName, String FirstName, String MiddleName, String Education,
+                                             String EmailInfo, String PhoneInfo, String Instagram, String Vk,
+                                             String Whatsapp, String Viber, String Facebook, String Other,
+                                             String Photo, String CheckedAndFocus, String Checkeds, String Indeterminate, String Empty) {
         page.createUserStepOneBase(Login, Email, Phone, Password, SecondName, FirstName, MiddleName);
         page.waitE_ClickableAndClick(page.checkboxInfoToEmail);
         page.waitE_ClickableAndClick(page.buttonAddUser);
         page.waitE_visibilityOf(page.successSecondStep);
         page.stepTwo();
-        page.stepThree();
+        page.stepThree(SecondName, CheckedAndFocus, Checkeds, Indeterminate, Empty);
         page.createUserStepFourBase(Education, EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other,
                 Photo);
         page.createUserStepFive(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education,
@@ -96,17 +95,18 @@ public class CreateUserLogic {
         }
     }
 
-    public void stepOneWithInfoToEmail(String Login, String Email, String Phone, String Password, String SecondName,
-                                       String FirstName, String MiddleName, String Education, String EmailInfo,
-                                       String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber,
-                                       String Facebook, String Other, String Photo) {
+    public void createUserWithInfoToEmail(String Login, String Email, String Phone, String Password, String SecondName,
+                                          String FirstName, String MiddleName, String Education, String EmailInfo,
+                                          String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber,
+                                          String Facebook, String Other, String Photo, String CheckedAndFocus,
+                                          String Checkeds, String Indeterminate, String Empty) {
 //        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
         page.createUserStepOneBase(Login, Email, Phone, Password, SecondName, FirstName, MiddleName);
         page.waitE_ClickableAndClick(page.switchSuperadmin);
         page.waitE_ClickableAndClick(page.buttonAddUser);
         page.waitE_visibilityOf(page.successSecondStep);
         page.stepTwo();
-        page.stepThree();
+        page.stepThree(SecondName, CheckedAndFocus, Checkeds, Indeterminate, Empty);
         page.createUserStepFourBase(Education, EmailInfo, PhoneInfo, Instagram, Vk, Whatsapp, Viber, Facebook, Other,
                 Photo);
         page.createUserStepFive(Login, Email, Phone, Password, SecondName, FirstName, MiddleName, Education,

@@ -172,6 +172,10 @@ public class HistoryChangesPage extends GlobalPage {
     @FindBy(xpath = "//span[text()= \"Скопировать ссылку\"]")
     public WebElement blockMoreInfoContextButtonCopyLink;
 
+    //    Всплывающее сообщение "Ссылка скопирована в буфер обмена"
+    @FindBy(xpath = "//div[3]/p[text()=\"Ссылка скопирована в буфер обмена\"]")
+    public WebElement popoverLinkIsCopy;
+
 
     public String nowDate() {
 
@@ -501,7 +505,7 @@ public class HistoryChangesPage extends GlobalPage {
 //    public WebElement buttonCancelCommunicationMethodsProfile;
 //
 //
-//    public void moveToProfileChange(String SecondName) {
+//    public void moveToProfileUserChange(String SecondName) {
 //        waitE_ClickableAndClick(menuWorkers);
 //        waitE_ClickableAndClick(buttonUserList);
 //        waitE_visibilityOf(listSecondName);

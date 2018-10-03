@@ -17,7 +17,6 @@ public class EditUserPage extends GlobalPage {
     }
 
 
-
     //--------------------------------------------------------------------------
     //  Учетная запись
 
@@ -25,7 +24,6 @@ public class EditUserPage extends GlobalPage {
     //    Фамилия
     @FindBy(css = ".edit-user-block__full-name > span:nth-child(1)")
     public WebElement secondNameProfile;
-
 
 
     //    Отчество
@@ -64,7 +62,7 @@ public class EditUserPage extends GlobalPage {
     public WebElement phoneProfile;
 
 
-//--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     //    Ссылка изменения пароля
     @FindBy(xpath = "//div[contains (text(), \"Пароль\")]/following-sibling::div")
     public WebElement linkEditPasswordProfile;
@@ -88,8 +86,6 @@ public class EditUserPage extends GlobalPage {
     //    Кнопка ОТМЕНА ПАРОЛЯ
     @FindBy(xpath = "//div[3]//span[contains (text(), \"Отмена\")]")
     public WebElement buttonCancelPassword;
-
-
 
 
     //----------------------------------------------------------------------------------
@@ -142,13 +138,13 @@ public class EditUserPage extends GlobalPage {
             "Университет)\")]")
     public WebElement headOrganization;
 
-    //   Буллет головной организации "ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский Университет)"
+//       Буллет головной организации "ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский Университет)"
     @FindBy(xpath = "//span[contains (text(), \"ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России (Сеченовский " +
-            "Университет)\")]/../label")
+            "Университет)\")]/../label/span/span")
     public WebElement bulletHeadOrganization;
 
     //   Поле ввода "Должность"
-    @FindBy(xpath = "//label[text()=\"Должность\"]")
+    @FindBy(xpath = "//input[@placeholder=\"Должность\"]")
     public WebElement inputPosition;
 
     //   Поле ввода "Роль сотрудника"
@@ -157,14 +153,44 @@ public class EditUserPage extends GlobalPage {
 
     //   Пункт "Специалист" в поле ввода "Роль сотрудника"
     @FindBy(xpath = "//span[text() = \"Специалист\"]")
-    public WebElement RoleEmployeeSpecialist;
+    public WebElement roleEmployeeSpecialist;
 
     //   Кнопка "Сохранить" место работы сотрудника
-    @FindBy(xpath = "//span[text() = \"Сохранить\"]")
-    public WebElement buttonSaveWorkplaces;
+    @FindBy(xpath = "//div[contains (text(), \"Добавить место работы\")]/following-sibling::div/button/span[contains " +
+            "(text(), \"Сохранить\")]")
+    public WebElement buttonSaveWorkplace;
 
+    //   Сохраненное значение "Место работы"
+    @FindBy(xpath = "//div[@class=\"edit-user-block__data-row-label\"][contains (text(), \"Место\")" +
+            "]/following-sibling::div")
+    public WebElement workplace;
 
+    //   Сохраненное значение "Должность"
+    @FindBy(xpath = "//div[@class=\"edit-user-block__data-row-label\"][contains (text(), \"Должность\")" +
+            "]/following-sibling::div")
+    public WebElement post;
 
+    //   Сохраненное значение "Роль"
+    @FindBy(xpath = "//div[@class=\"edit-user-block__data-row-label\"][contains (text(), \"Статус\")" +
+            "]/following-sibling::div")
+    public WebElement role;
+
+    //    Ссылка "изменить" специальность
+    @FindBy(xpath = "//div[contains (text(), \"Специальности\")]/following-sibling::div[2]")
+    public WebElement linkEditSpecialty;
+
+    //   Выпадающий список "Специальность"
+    @FindBy(xpath = "//input[@placeholder=\"Специальность\"]")
+    public WebElement listSpecialty;
+
+    //   Пункт "Хирург" в выпадающем списке "Специальность"
+    @FindBy(xpath = "//span[text()=\"Хирург\"]")
+    public WebElement specialtySurgeon;
+
+    //   Кнопка "Сохранить" место работы сотрудника
+    @FindBy(xpath = "//div[@class=\"edit-specialities__add\"]/following-sibling::button/span[contains (text(), " +
+            "\"Сохранить\")]")
+    public WebElement buttonSaveSpecialty;
 //-----------------------------------------------------------------------------------------------------------
 // Данные специалиста
 
@@ -174,7 +200,8 @@ public class EditUserPage extends GlobalPage {
     public WebElement photoProfile;
 
     //    Ссылка ИЗМЕНИТЬ ФОТО
-    @FindBy(xpath = "//div[@class='profile-userpic__photo userpic userpic--medium']/..//following-sibling::div/div[contains (text(), \"Изменить\")]")
+    @FindBy(xpath = "//div[@class='profile-userpic__photo userpic userpic--medium']/." +
+            ".//following-sibling::div/div[contains (text(), \"Изменить\")]")
     public WebElement linkEditPhotoProfile;
 
     //    Кнопка СОХРАНИТЬ ФОТО
@@ -270,7 +297,8 @@ public class EditUserPage extends GlobalPage {
     public WebElement inputOtherContactProfile;
 
     //    Ссылка ИЗМЕНИТЬ Способы связи
-    @FindBy(xpath = "//div[contains (text(), \"Способы связи\")]/following-sibling::div[contains (text(), \"Изменить\")]")
+    @FindBy(xpath = "//div[contains (text(), \"Способы связи\")]/following-sibling::div[contains (text(), " +
+            "\"Изменить\")]")
     public WebElement linkEditCommunicationMethodsProfile;
 
     //    Кнопка СОХРАНИТЬ Способы связи
@@ -280,11 +308,6 @@ public class EditUserPage extends GlobalPage {
     //    Кнопка ОТМЕНИТЬ СОХРАНЕНИЕ Способов связи
     @FindBy(xpath = "//div[2]/button[2]/span[contains (text(), \"Отмена\")]")
     public WebElement buttonCancelCommunicationMethodsProfile;
-
-
-
-
-
 
 
 }

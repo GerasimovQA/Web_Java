@@ -11,12 +11,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.ConfigProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreateUserPage extends GlobalPage {
 
     public CreateUserPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
     }
+
+    private ArrayList<String> ListServices = new ArrayList<>();
+
 
     // ГЛОБАЛЬНЫЕ ЭЛЕМЕНТЫ
     //   Кнопка добавления сотрудника с проверкой на текст "Добавить сотрудника"
@@ -143,7 +149,8 @@ public class CreateUserPage extends GlobalPage {
     public WebElement selectStructureOrganization;
 
     //Головная организация в выпадающем списке "Структура организации"
-    @FindBy(xpath = "//div[1]/div[2]/div[1]/div/label/span/span")
+    @FindBy(xpath = "(//*[@class=\"el-popover el-popper\"])" +
+            "[2]/div[1]/div[2]/div[1]/div/label/span[@class=\"el-checkbox__input\"]")
     public WebElement selectMainOrganization;
 
     //Поле ввода "Должность"
@@ -158,13 +165,13 @@ public class CreateUserPage extends GlobalPage {
     @FindBy(xpath = "//span[contains (text(),\"Специалист\")]")
     public WebElement selectWorkerRoleSpecialist;
 
-    //Выпадающий список "Специальность"
-    @FindBy(css = ".el-input__inner[placeholder=\"Специальность\"]")
+    //Выпадающий список "Специальности"
+    @FindBy(xpath = "//div[contains (text(),\"Специальности\")]")
     public WebElement selectWorkerSpecialty;
 
-    //Пункт "Хирург" в  выпадающем списке "Специальность"
-    @FindBy(xpath = ".//span[contains (text(),\"Хирург\")]")
-    public WebElement selectWorkerSpecialtySurgeon;
+    //Пункт "Медицинские специальности" в  выпадающем списке "Специальноси"
+    @FindBy(xpath = "//span[contains (text(),\"Медицинские специальности\")]/../label")
+    public WebElement selectWorkerSpecialtyMed;
 
     //   Проверка успешного перехода на ШАГ №3 фразой содержащей текст "Оказываемые услуги "
     @FindBy(xpath = "//div[contains (text(), \"Оказываемые услуги\")]")
@@ -173,9 +180,78 @@ public class CreateUserPage extends GlobalPage {
     //-------------------------------------------------------
 
     //ШАГ 3 - Оказываемые услуги
-    //Чек-бокс "Укажите оказываемые услуги "
-    @FindBy(xpath = "//span[contains (text(), \"Консультации\")]/../../div[1]/label/span/span")
-    public WebElement checkBoxServices;
+    //Раздел услуг 1 уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[1]/span[2]")
+    public List<WebElement> textServices1;
+
+    //Чек-бокс раздела услуг 1 уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[1]/span[2]/../label/span")
+    public List<WebElement> checkServices1;
+
+    //Раздел услуг 2 уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[2]/div/div/span[2]")
+    public List<WebElement> textServices2;
+
+    //Чек-бокс раздела услуг 2уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[2]/div/div/span[2]/../label/span")
+    public List<WebElement> checkServices2;
+
+    //Услуги 3 уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[2]/div/div[2]/div/div/span[2]")
+    public List<WebElement> textServices3;
+
+    //Чек-бокс услуг 3 уровня
+    @FindBy(xpath = "//div[@class=\"el-tree default-tree\"]/div/div[2]/div/div[2]/div/div/span[2]/../label/span")
+    public List<WebElement> checkServices3;
+
+
+    //    //Услуга "Консультации врачей, отдельные манипуляции"
+//    @FindBy(xpath = "//span[contains (text(),\"Консультации врачей, отдельные манипуляции\")]")
+//    public WebElement textServices1;
+//
+//    //Чек-бокс раздела услуг "Консультации врачей, отдельные манипуляции"
+//    @FindBy(xpath = "//span[contains (text(),\"Консультации врачей, отдельные манипуляции\")]/../label")
+//    public WebElement checkServices1;
+//
+//    //Подраздел услуг "Услуги оказываемые в отделениях"
+//    @FindBy(xpath = "//span[contains (text(),\"Услуги оказываемые в отделениях\")]")
+//    public WebElement textServices2;
+//
+//    //Чек-бокс Подраздела Услуг "Услуги оказываемые в отделениях"
+//    @FindBy(xpath = "//span[contains (text(),\"Услуги оказываемые в отделениях\")]/../label")
+//    public WebElement checkServices2;
+//
+//    //Подраздел услуг "Стоимость койко-дня в отделениях"
+//    @FindBy(xpath = "//span[contains (text(),\"Стоимость койко-дня в отделениях\")]")
+//    public WebElement textServices3;
+//
+//    //Чек-бокс Подраздела Услуг "Стоимость койко-дня в отделениях"
+//    @FindBy(xpath = "//span[contains (text(),\"Стоимость койко-дня в отделениях\")]/../label")
+//    public WebElement checkServices3;
+//
+//    //Услуга "Койко-день в общей палате, 1650 руб"
+//    @FindBy(xpath = "//span[contains (text(),\"Койко-день в общей палате, 1650 руб\")]")
+//    public WebElement textServices4;
+//
+//    //Чек-бокс Услуги "Койко-день в общей палате, 1650 руб"
+//    @FindBy(xpath = "//span[contains (text(),\"Койко-день в общей палате, 1650 руб\")]/../label")
+//    public WebElement checkServices4;
+//
+    //Список строк выбранных услуг
+    @FindBy(xpath = "//div[@class=\"create-user-form-services-cost__table-row\"]")
+    public List<WebElement> listStringSelectServices;
+
+    //Список названий выбранных услуг
+    @FindBy(xpath = "//div[@class=\"create-user-form-services-cost__table-label\"]")
+    public List<WebElement> listTextSelectServices;
+
+    //Список стоимостей выбранных услуг
+    @FindBy(xpath = "//div[@class=\"create-user-form-services-cost__table-cost\"]")
+    public List<WebElement> listCostSelectServices;
+
+    //Список иконок удаления выбранных услуг
+    @FindBy(xpath = "//i[@class=\"create-user-form-services-cost__table-delete el-icon-close\"]")
+    public List<WebElement> listIconsDeleteSelectServices;
 
     //   Проверка успешного перехода на ШАГ №4 фразой содержащей текст "Добавить фото"
     @FindBy(xpath = "//div[contains (text(), \"Добавить фото\")]")
@@ -281,6 +357,11 @@ public class CreateUserPage extends GlobalPage {
 //    @FindBy(xpath = "//div[contains (text(), \"Специальност\")]/following-sibling::ul/li")
 //    public WebElement saveWorkerSpecialty;
 
+
+    // Сохраняемые Услуги
+    @FindBy(xpath = "//div[contains (text(), \"Услуги\")]/following-sibling::div/div")
+    public List<WebElement> saveServices;
+
     // Сохраняемые Образование, достижения, регалии
     @FindBy(xpath = "//div[text()=\"Образование, достижения, регалии\"]/following-sibling::div")
     public WebElement saveEducation;
@@ -326,7 +407,8 @@ public class CreateUserPage extends GlobalPage {
     public WebElement successCreate;
 
 
-    public void createUserStepOneBase(String Login, String Email, String Phone, String Password, String SecondName, String FirstName, String MiddleName) {
+    public void createUserStepOneBase(String Login, String Email, String Phone, String Password, String SecondName,
+                                      String FirstName, String MiddleName) {
         waitE_ClickableAndClick(menuWorkers);
         waitE_ClickableAndClick(menuCreateWorker);
         waitE_ClickableAndSendKeys(inputlogin, Login);
@@ -338,7 +420,8 @@ public class CreateUserPage extends GlobalPage {
         waitE_ClickableAndSendKeys(inputMiddleName, MiddleName);
     }
 
-    public void createUserStepOneBaseWithoutMiddleName(String Login, String Email, String Phone, String Password, String SecondName, String FirstName) {
+    public void createUserStepOneBaseWithoutMiddleName(String Login, String Email, String Phone, String Password,
+                                                       String SecondName, String FirstName) {
         waitE_ClickableAndClick(menuWorkers);
         waitE_ClickableAndClick(menuCreateWorker);
         waitE_ClickableAndSendKeys(inputlogin, Login);
@@ -367,21 +450,443 @@ public class CreateUserPage extends GlobalPage {
         waitE_ClickableAndClick(selectWorkerRole);
         waitE_ClickableAndClick(selectWorkerRoleSpecialist);
         waitE_ClickableAndClick(selectWorkerSpecialty);
-        waitE_ClickableAndClick(selectWorkerSpecialtySurgeon);
+        waitE_ClickableAndClick(selectWorkerSpecialtyMed);
+        waitE_ClickableAndClick(body);
         waitE_ClickableAndClick(buttonAddUser);
         waitE_visibilityOf(successSecondThree);
     }
 
-    public void stepThree() {
-        waitE_ClickableAndClick(checkBoxServices);
+    public void stepThree(String SecondName, String CheckedAndFocus, String Checkeds, String Indeterminate,
+                          String Empty) {
+        int i = -1;
+
+        switch (SecondName) {
+            case "Аничкин":
+                waitE_ClickableAndClick(textServices1.get(0));
+                sleep(500);
+                waitE_ClickableAndClick(textServices2.get(0));
+                sleep(500);
+                for (WebElement Service : checkServices3) {
+                    i = i + 1;
+                    if (i == 0) {
+                        waitE_ClickableAndClick(checkServices3.get(i));
+                        System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                                listCostSelectServices.get(i).getText());
+                        Assert.assertTrue(textServices3.get(i).getText().equals(listTextSelectServices.get(i).getText() + ", " +
+                                listCostSelectServices.get(i).getText()));
+                        System.out.println(checkServices3.get(i).getAttribute("class") + " = " + CheckedAndFocus);
+                        Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(CheckedAndFocus));
+                    } else {
+                        try {
+                            System.out.println("Check-box " + i + " = " + checkServices3.get(i).getAttribute("class") +
+                                    " = " + Empty);
+                            Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(Empty));
+
+                            System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() +
+                                    ", " + listCostSelectServices.get(i).getText());
+                            Assert.assertTrue(textServices3.get(i).getText().equals(""));
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("Невыделенные услуги не найдены");
+                        }
+                    }
+                }
+                System.out.println("Icon DELETE is enabled and size = 1");
+                Assert.assertTrue(listIconsDeleteSelectServices.get(0).isEnabled() & listIconsDeleteSelectServices.size() == 1);
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices1.get(0).getAttribute("class").equals(Indeterminate));
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices2.get(0).getAttribute("class").equals(Indeterminate));
+
+
+                for (WebElement String : listStringSelectServices) {
+                    System.out.println(String.getText());
+                }
+                break;
+
+            case "Аниськин":
+                waitE_ClickableAndClick(textServices1.get(0));
+                sleep(500);
+                waitE_ClickableAndClick(textServices2.get(0));
+                sleep(500);
+                for (WebElement Service : checkServices3) {
+                    i = i + 1;
+                    waitE_ClickableAndClick(checkServices3.get(i));
+                    ListServices.add(listStringSelectServices.get(i).getText().replace("\n", " "));
+                    System.out.println("1234 = " + ListServices);
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertTrue(textServices3.get(i).getText().equals(listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText()));
+                    System.out.println(checkServices3.get(i).getAttribute("class") + " = " + CheckedAndFocus);
+                    Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(CheckedAndFocus));
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + textServices3.size() + " = " + checkServices3.size());
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == textServices3.size() &
+                        textServices3.size() == checkServices3.size());
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices1.get(0).getAttribute("class").equals(Indeterminate));
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Checkeds);
+                Assert.assertTrue(checkServices2.get(0).getAttribute("class").equals(Checkeds));
+
+
+                System.out.println("Unselect last service");
+                ListServices.remove(listStringSelectServices.get(i).getText());
+                waitE_ClickableAndClick(checkServices3.get(i));
+                waitE_ClickableAndClick(body);
+                try {
+                    System.out.println("Сняли выделение с: " + textServices3.get(i).getText());
+                    System.out.println("Check-box " + i + " = " + checkServices3.get(i).getAttribute(
+                            "class") + " = " + Empty);
+                    Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(Empty));
+
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertTrue(textServices3.get(i).getText().equals(""));
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Невыделенные услуги не найдены");
+                }
+
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + (textServices3.size() - 1) + " = " + (checkServices3.size() - 1));
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == (textServices3.size() - 1) &
+                        (textServices3.size() - 1) == (checkServices3.size() - 1));
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices1.get(0).getAttribute("class").equals(Indeterminate));
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices2.get(0).getAttribute("class").equals(Indeterminate));
+
+                System.out.println("ListString= " + ListServices);
+
+                break;
+
+            case "Авитисян":
+                waitE_ClickableAndClick(textServices1.get(0));
+                sleep(500);
+                waitE_ClickableAndClick(textServices2.get(0));
+                sleep(500);
+                for (WebElement Service : checkServices3) {
+                    i = i + 1;
+                    waitE_ClickableAndClick(checkServices3.get(i));
+                    Assert.assertTrue(textServices3.get(i).getText().contains(" руб."));
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertTrue(textServices3.get(i).getText().equals(listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText()));
+                    System.out.println(checkServices3.get(i).getAttribute("class") + " = " + CheckedAndFocus);
+                    Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(CheckedAndFocus));
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + textServices3.size() + " = " + checkServices3.size());
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == textServices3.size() &
+                        textServices3.size() == checkServices3.size());
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertTrue(checkServices1.get(0).getAttribute("class").equals(Indeterminate));
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Checkeds);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Checkeds);
+
+
+                System.out.println("Delete one service");
+                Assert.assertTrue(listCostSelectServices.get(i).getText().contains(" руб."));
+                waitE_ClickableAndClick(listIconsDeleteSelectServices.get(i));
+                sleep(1000);
+                try {
+                    System.out.println("Сняли выделение с: " + textServices3.get(i).getText());
+                    System.out.println("Check-box " + i + " = " + checkServices3.get(i).getAttribute(
+                            "class") + " = " + Empty);
+                    Assert.assertEquals(checkServices3.get(i).getAttribute("class"), Empty);
+
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertEquals("", textServices3.get(i).getText());
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Невыделенные услуги не найдены");
+                }
+
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + (textServices3.size() - 1) + " = " + (checkServices3.size() - 1));
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == (textServices3.size() - 1) &
+                        (textServices3.size() - 1) == (checkServices3.size() - 1));
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertEquals(checkServices1.get(0).getAttribute("class"), Indeterminate);
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Indeterminate);
+
+                System.out.println("Delete all service");
+                try {
+                    for (WebElement Service : checkServices3) {
+                        System.out.println("Сняли выделение с: " + listTextSelectServices.get(0).getText());
+                        waitE_ClickableAndClick(listIconsDeleteSelectServices.get(0));
+                        sleep(1000);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Удалили все услуги в списке");
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size());
+                System.out.println(textServices3.size() + " = " + checkServices3.size());
+                Assert.assertEquals(0, listIconsDeleteSelectServices.size());
+                Assert.assertEquals(0, listTextSelectServices.size());
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Empty);
+                Assert.assertEquals(checkServices1.get(0).getAttribute("class"), Empty);
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Empty);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Empty);
+                break;
+
+            case "Аннуфриев":
+                waitE_ClickableAndClick(textServices1.get(0));
+                sleep(500);
+                int a = -1;
+                for (WebElement Service2 : textServices2) {
+                    a = a + 1;
+                    waitE_ClickableAndClick(textServices2.get(a));
+                    sleep(500);
+                }
+                for (WebElement Service : checkServices3) {
+                    i = i + 1;
+                    System.out.println("Size = " + checkServices3.size());
+                    System.out.println("Click i = " + i);
+                    waitE_ClickableAndClick(checkServices3.get(i));
+                    Assert.assertTrue(textServices3.get(i).getText().contains(" руб."));
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertTrue(textServices3.get(i).getText().equals(listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText()));
+                    System.out.println(checkServices3.get(i).getAttribute("class") + " = " + CheckedAndFocus);
+                    Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(CheckedAndFocus));
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + textServices3.size() + " = " + checkServices3.size());
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == textServices3.size() &
+                        textServices3.size() == checkServices3.size());
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Checkeds);
+                Assert.assertTrue(checkServices1.get(0).getAttribute("class").equals(Checkeds));
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Checkeds);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Checkeds);
+
+                System.out.println(checkServices2.get(1).getAttribute("class") + " = " + Checkeds);
+                Assert.assertEquals(checkServices2.get(1).getAttribute("class"), Checkeds);
+
+                System.out.println("Delete one service");
+                Assert.assertTrue(listCostSelectServices.get(i).getText().contains(" руб."));
+                waitE_ClickableAndClick(listIconsDeleteSelectServices.get(i));
+                sleep(1000);
+                try {
+                    System.out.println("Сняли выделение с: " + textServices3.get(i).getText());
+                    System.out.println("Check-box " + i + " = " + checkServices3.get(i).getAttribute(
+                            "class") + " = " + Empty);
+                    Assert.assertEquals(checkServices3.get(i).getAttribute("class"), Empty);
+
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertEquals("", textServices3.get(i).getText());
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Невыделенные услуги не найдены");
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + (textServices3.size() - 1) + " = " + (checkServices3.size() - 1));
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == (textServices3.size() - 1) &
+                        (textServices3.size() - 1) == (checkServices3.size() - 1));
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertEquals(checkServices1.get(0).getAttribute("class"), Indeterminate);
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Checkeds);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Checkeds);
+
+                System.out.println(checkServices2.get(1).getAttribute("class") + " = " + Indeterminate);
+                Assert.assertEquals(checkServices2.get(1).getAttribute("class"), Indeterminate);
+
+                System.out.println("Delete all service");
+                try {
+                    for (WebElement Service : checkServices3) {
+                        System.out.println("Сняли выделение с: " + listTextSelectServices.get(0).getText());
+                        waitE_ClickableAndClick(listIconsDeleteSelectServices.get(0));
+                        sleep(1000);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Удалили все услуги в списке");
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size());
+                System.out.println(textServices3.size() + " = " + checkServices3.size());
+                Assert.assertEquals(0, listIconsDeleteSelectServices.size());
+                Assert.assertEquals(0, listTextSelectServices.size());
+
+                System.out.println(checkServices1.get(0).getAttribute("class") + " = " + Empty);
+                Assert.assertEquals(checkServices1.get(0).getAttribute("class"), Empty);
+
+                System.out.println(checkServices2.get(0).getAttribute("class") + " = " + Empty);
+                Assert.assertEquals(checkServices2.get(0).getAttribute("class"), Empty);
+
+                System.out.println(checkServices2.get(1).getAttribute("class") + " = " + Empty);
+                Assert.assertEquals(checkServices2.get(1).getAttribute("class"), Empty);
+                break;
+
+            case "Djon":
+                int c = -1;
+                for (WebElement Service1 : textServices1) {
+                    c = c + 1;
+                    if (c < textServices1.size() - 1) {
+                        waitE_ClickableAndClick(textServices1.get(c));
+                        sleep(500);
+                    }
+                }
+                int b = -1;
+                for (WebElement Service2 : textServices2) {
+                    b = b + 1;
+                    waitE_ClickableAndClick(textServices2.get(b));
+                    sleep(500);
+                }
+                for (WebElement Service3 : checkServices3) {
+                    i = i + 1;
+                    System.out.println("Size = " + checkServices3.size());
+                    System.out.println("Click i = " + i);
+                    waitE_ClickableAndClick(checkServices3.get(i));
+                    sleep(500);
+                    Assert.assertTrue(textServices3.get(i).getText().contains(" руб."));
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertTrue(textServices3.get(i).getText().equals(listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText()));
+                    System.out.println(checkServices3.get(i).getAttribute("class") + " = " + CheckedAndFocus);
+                    Assert.assertTrue(checkServices3.get(i).getAttribute("class").equals(CheckedAndFocus));
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + textServices3.size() + " = " + checkServices3.size());
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == textServices3.size() &
+                        textServices3.size() == checkServices3.size());
+
+                for (int x = 0; x < checkServices1.size() - 1; x++) {
+                    System.out.println("Lev1 - " + x + " = " + checkServices1.get(x).getAttribute("class") + " = " + Checkeds);
+                    Assert.assertEquals(checkServices1.get(x).getAttribute("class"), Checkeds);
+                }
+                for (int x = 0; x < checkServices2.size(); x++) {
+                    System.out.println(checkServices2.get(x).getAttribute("class") + " = " + Checkeds);
+                    Assert.assertEquals(checkServices2.get(x).getAttribute("class"), Checkeds);
+                }
+                for (int x = 0; x < checkServices3.size(); x++) {
+                    if (x < checkServices3.size() - 1) {
+                        System.out.println(checkServices3.get(x).getAttribute("class") + " = " + Checkeds);
+                        Assert.assertEquals(checkServices3.get(x).getAttribute("class"), Checkeds);
+                    } else {
+                        System.out.println(checkServices3.get(x).getAttribute("class") + " = " + CheckedAndFocus);
+                        Assert.assertEquals(checkServices3.get(x).getAttribute("class"), CheckedAndFocus);
+                    }
+                }
+                System.out.println("Delete one service");
+                Assert.assertTrue(listCostSelectServices.get(i).getText().contains(" руб."));
+                waitE_ClickableAndClick(listIconsDeleteSelectServices.get(i));
+                sleep(1000);
+                try {
+                    System.out.println("Сняли выделение с: " + textServices3.get(i).getText());
+                    System.out.println("Check-box " + i + " = " + checkServices3.get(i).getAttribute(
+                            "class") + " = " + Empty);
+                    Assert.assertEquals(checkServices3.get(i).getAttribute("class"), Empty);
+
+                    System.out.println(textServices3.get(i).getText() + " = " + listTextSelectServices.get(i).getText() + ", " +
+                            listCostSelectServices.get(i).getText());
+                    Assert.assertEquals("", textServices3.get(i).getText());
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Невыделенные услуги не найдены");
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size() +
+                        " = " + (textServices3.size() - 1) + " = " + (checkServices3.size() - 1));
+                Assert.assertTrue(listIconsDeleteSelectServices.size() == listTextSelectServices.size() &
+                        listTextSelectServices.size() == (textServices3.size() - 1) &
+                        (textServices3.size() - 1) == (checkServices3.size() - 1));
+
+                for (int x = 0; x < checkServices1.size(); x++) {
+                    if (x < checkServices1.size() - 2) {
+                        System.out.println(checkServices1.get(x).getAttribute("class") + " = " + Checkeds);
+                        Assert.assertEquals(checkServices1.get(x).getAttribute("class"), Checkeds);
+                    } else {
+                        System.out.println(checkServices1.get(x).getAttribute("class") + " = " + Empty);
+                        Assert.assertEquals(checkServices1.get(x).getAttribute("class"), Empty);
+                    }
+                }
+                for (int x = 0; x < checkServices2.size(); x++) {
+                    if (x < checkServices2.size() - 1) {
+                        System.out.println(checkServices2.get(x).getAttribute("class") + " = " + Checkeds);
+                        Assert.assertEquals(checkServices2.get(x).getAttribute("class"), Checkeds);
+                    } else {
+                        System.out.println(checkServices2.get(x).getAttribute("class") + " = " + Empty);
+                        Assert.assertEquals(checkServices2.get(x).getAttribute("class"), Empty);
+                    }
+                }
+                for (int x = 0; x < checkServices3.size(); x++) {
+                    if (x < checkServices3.size() - 1) {
+                        System.out.println(checkServices3.get(x).getAttribute("class") + " = " + Checkeds);
+                        Assert.assertEquals(checkServices3.get(x).getAttribute("class"), Checkeds);
+                    } else {
+                        System.out.println(checkServices3.get(x).getAttribute("class") + " = " + Empty);
+                        Assert.assertEquals(checkServices3.get(x).getAttribute("class"), Empty);
+                    }
+                }
+                System.out.println("Delete all service");
+                try {
+                    for (WebElement Service : checkServices3) {
+                        System.out.println("Сняли выделение с: " + listTextSelectServices.get(0).getText());
+                        waitE_ClickableAndClick(listIconsDeleteSelectServices.get(0));
+                        sleep(1000);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Удалили все услуги в списке");
+                }
+
+                System.out.println(listIconsDeleteSelectServices.size() + " = " + listTextSelectServices.size());
+                System.out.println(textServices3.size() + " = " + checkServices3.size());
+                Assert.assertEquals(0, listIconsDeleteSelectServices.size());
+                Assert.assertEquals(0, listTextSelectServices.size());
+                for (WebElement CheckServices1 : checkServices1) {
+                    System.out.println(CheckServices1.getAttribute("class") + " = " + Empty);
+                    Assert.assertEquals(CheckServices1.getAttribute("class"), Empty);
+                }
+                for (WebElement CheckServices2 : checkServices2) {
+                    System.out.println(CheckServices2.getAttribute("class") + " = " + Empty);
+                    Assert.assertEquals(CheckServices2.getAttribute("class"), Empty);
+                }
+                for (WebElement CheckServices3 : checkServices3) {
+                    System.out.println(CheckServices3.getAttribute("class") + " = " + Empty);
+                    Assert.assertEquals(CheckServices3.getAttribute("class"), Empty);
+                }
+        }
         waitE_ClickableAndClick(buttonAddUser);
     }
 
-    public void createUserStepFourBase(String Education, String Email, String Phone, String Instagram, String Vk, String Whatapp, String Viber, String Facebook, String Other, String Photo) {
-//        WebElement upload = uploadPhoto;
-//        ((JavascriptExecutor)driver).executeScript("arguments[0].checked = true;", uploadPhoto);
+    public void createUserStepFourBase(String Education, String Email, String Phone, String Instagram, String Vk,
+                                       String Whatapp, String Viber, String Facebook, String Other, String Photo) {
         uploadPhoto.sendKeys(ConfigProperties.getTestProperty("Files") + Photo);
-        waitE_ClickableAndClick(buttonSavePhoto);
+        waitE_ClickableAndClick(buttonSavePhoto); sleep(5000);
         waitE_ClickableAndSendKeys(inputEducation, Education);
         waitE_ClickableAndSendKeys(inputEmailInfo, Email);
         waitE_ClickableAndSendKeys(inputPhoneInfo, Phone);
@@ -394,7 +899,10 @@ public class CreateUserPage extends GlobalPage {
         waitE_ClickableAndClick(buttonAddUser);
     }
 
-    public void createUserStepFive(String Login, String Email, String Phone, String Password, String SecondName, String FirstName, String MiddleName, String Education, String EmailInfo, String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber, String Facebook, String Other) {
+    public void createUserStepFive(String Login, String Email, String Phone, String Password, String SecondName,
+                                   String FirstName, String MiddleName, String Education, String EmailInfo,
+                                   String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber,
+                                   String Facebook, String Other) {
         waitE_visibilityOfAndGettext(savePhone);
         String SavePhone = savePhone.getText();
         String SavePhoneInfo = savePhoneInfo.getText();
@@ -406,7 +914,8 @@ public class CreateUserPage extends GlobalPage {
         System.out.println(Email + " = " + saveEmail.getText());
 
         Assert.assertTrue(SavePhone.equals("+7 (" + Phone.charAt(0) + Phone.charAt(1) + Phone.charAt(2) + ") " + Phone.charAt(3) + Phone.charAt(4) + Phone.charAt(5) + "-" + Phone.charAt(6) + Phone.charAt(7) + "-" + Phone.charAt(8) + Phone.charAt(9)));
-        System.out.println(SavePhone + " = " + "+7 (" + Phone.charAt(0) + Phone.charAt(1) + Phone.charAt(2) + ") " + Phone.charAt(3) + Phone.charAt(4) + Phone.charAt(5) + "-" + Phone.charAt(6) + Phone.charAt(7) + "-" + Phone.charAt(8) + Phone.charAt(9));
+        System.out.println(SavePhone + " = " + "+7 (" + Phone.charAt(0) + Phone.charAt(1) + Phone.charAt(2) + ") "
+                + Phone.charAt(3) + Phone.charAt(4) + Phone.charAt(5) + "-" + Phone.charAt(6) + Phone.charAt(7) + "-" + Phone.charAt(8) + Phone.charAt(9));
 
 
         Assert.assertTrue(SecondName.equals(saveSecondName.getText()));
@@ -418,50 +927,61 @@ public class CreateUserPage extends GlobalPage {
         Assert.assertTrue(MiddleName.equals(saveMiddleName.getText()));
         System.out.println(MiddleName + " = " + saveMiddleName.getText());
 
-        Assert.assertTrue(Education.equals(saveEducation.getText()));
+        int x = -1;
+        for (WebElement Service : saveServices) {
+            x = x + 1;
+            System.out.println(ListServices.get(x) + " = " + saveServices.get(x).getText().
+                    replace("\n", " ") + " руб.");
+            Assert.assertEquals("Selected and saved services are not equal",
+                    ListServices.get(x), saveServices.get(x).getText().replace("\n", " ") + " руб.");
+        }
+
+        Assert.assertEquals(Education, saveEducation.getText());
         System.out.println(Education + " = " + saveEducation.getText());
 
 
-        Assert.assertTrue(EmailInfo.equals(saveEmailInfo.getText()));
+        Assert.assertEquals(EmailInfo, saveEmailInfo.getText());
         System.out.println(EmailInfo + " = " + saveEmailInfo.getText());
 
-        Assert.assertTrue(SavePhoneInfo.equals("+7 (" + PhoneInfo.charAt(0) + PhoneInfo.charAt(1) + PhoneInfo.charAt(2) + ") " + PhoneInfo.charAt(3) + PhoneInfo.charAt(4) + PhoneInfo.charAt(5) + "-" + PhoneInfo.charAt(6) + PhoneInfo.charAt(7) + "-" + PhoneInfo.charAt(8) + PhoneInfo.charAt(9)));
-        System.out.println(SavePhoneInfo + " = " + "+7 (" + PhoneInfo.charAt(0) + PhoneInfo.charAt(1) + PhoneInfo.charAt(2) + ") " + PhoneInfo.charAt(3) + PhoneInfo.charAt(4) + PhoneInfo.charAt(5) + "-" + PhoneInfo.charAt(6) + PhoneInfo.charAt(7) + "-" + PhoneInfo.charAt(8) + PhoneInfo.charAt(9));
+        Assert.assertEquals(SavePhoneInfo, "+7 (" + PhoneInfo.charAt(0) + PhoneInfo.charAt(1) + PhoneInfo.charAt(2) +
+                ") " + PhoneInfo.charAt(3) + PhoneInfo.charAt(4) + PhoneInfo.charAt(5) + "-" + PhoneInfo.charAt(6) +
+                PhoneInfo.charAt(7) + "-" + PhoneInfo.charAt(8) + PhoneInfo.charAt(9));
+        System.out.println(SavePhoneInfo + " = " + "+7 (" + PhoneInfo.charAt(0) + PhoneInfo.charAt(1) + PhoneInfo.charAt(2) +
+                ") " + PhoneInfo.charAt(3) + PhoneInfo.charAt(4) + PhoneInfo.charAt(5) + "-" + PhoneInfo.charAt(6) +
+                PhoneInfo.charAt(7) + "-" + PhoneInfo.charAt(8) + PhoneInfo.charAt(9));
 
-        Assert.assertTrue(Instagram.equals(saveInstagram.getText()));
+        Assert.assertEquals(Instagram, saveInstagram.getText());
         System.out.println(Instagram + " = " + saveInstagram.getText());
 
-        Assert.assertTrue(Vk.equals(saveVk.getText()));
+        Assert.assertEquals(Vk, saveVk.getText());
         System.out.println(Vk + " = " + saveVk.getText());
 
-        Assert.assertTrue(Whatsapp.equals(saveWhatsapp.getText()));
+        Assert.assertEquals(Whatsapp, saveWhatsapp.getText());
         System.out.println(Whatsapp + " = " + saveWhatsapp.getText());
 
-        Assert.assertTrue(Viber.equals(saveViber.getText()));
+        Assert.assertEquals(Viber, saveViber.getText());
         System.out.println(Viber + " = " + saveViber.getText());
 
-        Assert.assertTrue(Facebook.equals(saveFacebook.getText()));
+        Assert.assertEquals(Facebook, saveFacebook.getText());
         System.out.println(Facebook + " = " + saveFacebook.getText());
 
-        Assert.assertTrue(Other.equals(saveOther.getText()));
+        Assert.assertEquals(Other, saveOther.getText());
         System.out.println(Other + " = " + saveOther.getText());
 
         waitE_ClickableAndClick(buttonFinish);
         waitE_visibilityOf(successCreate);
     }
 
-    public void createUserStepSix(String Login, String Email, String Phone, String Password, String SecondName, String FirstName, String MiddleName, String Education, String EmailInfo, String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber, String Facebook, String Other) {
+    public void createUserStepSix(String Login, String Email, String Phone, String Password, String SecondName,
+                                  String FirstName, String MiddleName, String Education, String EmailInfo,
+                                  String PhoneInfo, String Instagram, String Vk, String Whatsapp, String Viber,
+                                  String Facebook, String Other) {
         waitE_ClickableAndClick(buttonUserList);
         waitE_visibilityOf(listSecondName);
-//        sleep(2000);
-//        scrollWithOffset(sumWorker, 0, -50);
-//        waitE_ClickableAndClick(sumWorker);
-//        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", sumWorker);
-//        moveMouse(sumWorker);
-//        waitE_visibilityOf(workers50);
-//        moveMouse(workers50);
-//        waitE_ClickableAndClick(workers50);
-        WebElement findToSecondName = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr/td[4]/div[contains (text(), \"" + SecondName + "\")]")));
+        WebElement findToSecondName =
+                new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tr" +
+                        "/td[4" +
+                        "]/div[contains (text(), \"" + SecondName + "\")]")));
         scrollWithOffset(findToSecondName, 0, 30);
         waitE_ClickableAndClick(findToSecondName);
         waitE_visibilityOfAndGettext(savePhone);
@@ -479,11 +999,11 @@ public class CreateUserPage extends GlobalPage {
 
         String Fio = SecondName + " " + FirstName + " " + MiddleName;
         System.out.println(Fio + " = " + fio.getText());
-       if (MiddleName.equals("")){
-           Assert.assertTrue(Fio.equals(fio.getText() + " "));
-       }
-       else {
-        Assert.assertTrue(Fio.equals(fio.getText()));}
+        if (MiddleName.equals("")) {
+            Assert.assertTrue(Fio.equals(fio.getText() + " "));
+        } else {
+            Assert.assertTrue(Fio.equals(fio.getText()));
+        }
 
 
         Assert.assertTrue(Education.equals(profEducation.getText()));
