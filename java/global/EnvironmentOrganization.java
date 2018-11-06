@@ -17,11 +17,11 @@ public class EnvironmentOrganization {
     static String Token = "";
     static String OrganizationID = "";
 
-
     public static void login() {
         Map<String, Object> jsonAsMap = new HashMap<>();
         jsonAsMap.put("auth", GlobalPage.LoginAUT);
         jsonAsMap.put("password", GlobalPage.PasswordAUT);
+
 
         Response response =
                 given().log().all().
@@ -30,8 +30,7 @@ public class EnvironmentOrganization {
                         baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("/passport/sess/login").
                         when().post().
                         then().extract().response();
-
-        Token = response.path("sid_hash");
+         Token = response.path("sid_hash");
         System.out.println("Получили токен: " + Token);
     }
 
@@ -140,67 +139,4 @@ public class EnvironmentOrganization {
 
     }
 
-
-//
-//    public static void uploadPhotoUserAPI(String Photo) {
-//        Response response =
-//                given().log().all().
-//                        header("Authorization", "Bearer " + Token).
-//                        contentType("multipart/form-data").
-//                        accept("application/json").
-//                        multiPart(new File(ConfigProperties.getTestProperty("Files") + Photo)).
-//                        multiPart("user_id", UserID).
-//                        baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("/profile/admin/user/userpic/").
-//                        when().post().
-//                        then().extract().response();
-//
-//        System.out.println("Ответ: " + response.getBody().asString());
-//
-//    }
-//
-//
-//    public static void BigDataAPI() {
-//
-//        Response response =
-//                given().log().all().
-//                        header("Authorization", "Bearer " + Token).
-//                        queryParam("limit", "10000").
-//                        queryParam("offset", "0").
-//                        queryParam("obj_id", "5b58130f0faa2638b94fc4d7").
-//                        queryParam("t_beg", "2017-08-31T20:00:00.000Z").
-//                        queryParam("t_end", "2018-09-01T19:59:59.000Z").
-//                        contentType(ContentType.JSON).
-//                        baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("passport/admin/hist").
-//                        when().get().
-//                        then().extract().response();
-//
-//        System.out.println("История изменений за указанный срок: " + response.getBody().asString());
-//
-//        ArrayList ListId = new ArrayList<>();
-//        List<String> listdata = new ArrayList<>();
-//
-//        ListId.add(response.path("hist.ts"));
-//        String[] subStr;
-//        String delimeter = ","; // Разделитель
-//        subStr = ListId.get(0).toString().split(delimeter);
-//
-//        for (int i = 0; i < subStr.length; i++) {
-//            listdata.add(subStr[i]);
-//
-//            int index = subStr[i].indexOf("T");
-//            String StringDate = subStr[i].substring(0, index).replace(" ", "")
-//                    .replace("[", "").replace("]", "");
-//
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-//            LocalDate date = LocalDate.parse(StringDate, formatter);
-//            System.out.println(date);
-//
-//            LocalDate StartDate = LocalDate.of(2017, 8, 31);
-//            LocalDate EndtDate = LocalDate.of(2018, 9, 1);
-//            System.out.println(date + " больше " + StartDate + " и меньше " + EndtDate);
-//            Assert.assertTrue(date.isAfter(StartDate) & date.isBefore(EndtDate));
-//        }
-//        System.out.println("Количество записей: " + listdata.size());
-//        System.out.println(listdata);
-//    }
 }

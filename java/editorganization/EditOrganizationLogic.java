@@ -1,8 +1,11 @@
 package editorganization;
 
+import createuser.CreateUserPage;
 import global.GlobalPage;
 import junitparams.JUnitParamsRunner;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -11,9 +14,15 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.ConfigProperties;
+
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 @RunWith(JUnitParamsRunner.class)
 public class EditOrganizationLogic {
@@ -21,25 +30,32 @@ public class EditOrganizationLogic {
     private static WebDriver driver;
     private static EditOrganizationPage page;
 
+    String StatusRus = "";
+    String NowDateCreate = "";
+    String NowDateEdit = "";
+    public ArrayList<String> ListSaveServices = new ArrayList<>();
+    public ArrayList<String> ListServicesInProfile = new ArrayList<>();
 
     @Rule
     public TestRule screenshotRule = new TestWatcher() {
 
         @Override
         protected void starting(Description description) {
-            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments(ConfigProperties.getTestProperty("head"));
-            options.addArguments("window-size=1200,800");
-            driver = new ChromeDriver(options);
-            page = new EditOrganizationPage(driver);
-            driver.get(ConfigProperties.getTestProperty("baseurl"));
-            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+//            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments(ConfigProperties.getTestProperty("head"));
+//            options.addArguments("window-size=1200,800");
+//            driver = new ChromeDriver(options);
+//            page = new EditOrganizationPage(driver);
+//            driver.get(ConfigProperties.getTestProperty("baseurl"));
+//            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
         }
 
         @Override
         protected void finished(Description description) {
-            driver.quit();
+            page.SelectedServices.clear();
+            driver.navigate().refresh();
+//            driver.quit();
         }
 
         @Override
@@ -48,11 +64,44 @@ public class EditOrganizationLogic {
         }
     };
 
+    @BeforeClass
+    public static void beforClass() {
+        System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(ConfigProperties.getTestProperty("head"));
+        options.addArguments("window-size=1200,800");
+
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        driver = new ChromeDriver(options);
+        page = new EditOrganizationPage(driver);
+        driver.get(ConfigProperties.getTestProperty("baseurl"));
+        driver.manage().logs().get(LogType.BROWSER);
+        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        driver.quit();
+    }
+
+    public void dateCreateOrg() {
+        NowDateCreate = GlobalPage.nowDate();
+    }
+
     public void editDataOrganization(String Name, String NewName, String NewAbbr, String SecondNameDirectorOrganization,
                                      String FirstNameDirectorOrganization, String MiddleNameDirectorOrganization,
                                      String FIODirector, String NewHead, String ConditionsOrganization,
-                                     String ProfileOrganization) {
+                                     String ProfileOrganization, String Abbr,
+                                     String Help_conditions, String Org_profile, String Description, String Address,
+                                     String Email, String Facebook, String Instagram, String Vk,
+                                     String Other, String NamePhone1, String NumberPhone1, String NamePhone2,
+                                     String NumberPhone2, String Code, String Oms_number, String Pump,
+                                     String Oms_id, String Status) {
         page.moveToProfileOrg(Name);
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_visibilityOf(page.nameOrganization);
         String Name1 = page.nameOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeNameOrganization);
@@ -61,7 +110,7 @@ public class EditOrganizationLogic {
         page.waitE_visibilityOf(page.nameOrganization);
         String Name2 = page.nameOrganization.getText();
         System.out.println(Name1 + " != " + Name2 + " = " + NewName);
-        Assert.assertTrue(!Name1.equals(Name2) & Name2.equals(NewName));
+        Assert.assertTrue(!Name1.equals(Name2) && Name2.equals(NewName));
 
         String Abbr1 = page.abbrNameOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeAbbrNameOrganization);
@@ -70,7 +119,7 @@ public class EditOrganizationLogic {
         page.waitE_visibilityOf(page.abbrNameOrganization);
         String Abbr2 = page.abbrNameOrganization.getText();
         System.out.println(Abbr1 + " != " + Abbr2 + " = " + NewAbbr);
-        Assert.assertTrue(!Abbr1.equals(Abbr2) & Abbr2.equals(NewAbbr));
+        Assert.assertTrue(!Abbr1.equals(Abbr2) && Abbr2.equals(NewAbbr));
 
         String Director1 = page.directorOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeDirectorOrganization);
@@ -78,10 +127,11 @@ public class EditOrganizationLogic {
         page.waitE_ClickableAndSendKeys(page.inputSecondNameDirectorOrganization, SecondNameDirectorOrganization);
         page.waitE_ClickableAndSendKeys(page.inputFirstNameDirectorOrganization, FirstNameDirectorOrganization);
         page.waitE_ClickableAndSendKeys(page.inputMiddleNameDirectorOrganization, MiddleNameDirectorOrganization);
-        page.waitE_ClickableAndClick(page.buttonSearch);
-        page.waitE_visibilityOf(page.FIODirecor);
-        Assert.assertTrue(page.photoDirecor.isEnabled() & page.FIODirecor.getText().equals(FIODirector));
-        page.waitE_ClickableAndClick(page.FIODirecor);
+        page.waitE_ClickableAndClick(page.buttonSearchDirector);
+        page.sleep(2000);
+        page.waitE_visibilityOf(page.listFIODirecor.get(0));
+        Assert.assertTrue(page.listPhotoDirecor.get(0).isEnabled() & page.listFIODirecor.get(0).getText().equals(FIODirector));
+        page.waitE_ClickableAndClick(page.buttonSelectDirecor.get(0));
         page.waitE_visibilityOf(page.newDirectorOrganization);
         String Director2 = page.newDirectorOrganization.getText();
         System.out.println(Director1 + " != " + Director2 + " = " + FIODirector);
@@ -89,6 +139,7 @@ public class EditOrganizationLogic {
 
         String Head1 = page.headOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeHeadOrganization);
+        page.waitE_ClickableAndClick(page.inputStructureOrganization);
         if (FirstNameDirectorOrganization.equals("Арис")) {
             page.waitE_ClickableAndClick(page.NameHeadOrganization);
             page.waitE_ClickableAndClick(page.NameDentalCenter);
@@ -102,7 +153,7 @@ public class EditOrganizationLogic {
         page.waitE_visibilityOf(page.headOrganization);
         String Head2 = page.headOrganization.getText();
         System.out.println(Head1 + " != " + Head2 + " = " + NewHead);
-        Assert.assertTrue(!Head1.equals(Head2) & Head2.equals(NewHead));
+        Assert.assertTrue(!Head1.equals(Head2) & NewHead.contains(Head2));
 
         String Conditions1 = page.conditionsOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeConditionsOrganization);
@@ -121,11 +172,55 @@ public class EditOrganizationLogic {
         page.waitE_ClickableAndClick(page.linkChangeProfileOrganization);
         page.waitE_ClickableAndSendKeys(page.inputProfileOrganization, ProfileOrganization);
         page.waitE_ClickableAndClick(page.buttonSave);
+        NowDateEdit = GlobalPage.nowDate();
         page.waitE_visibilityOf(page.profileOrganization);
         String Profile2 = page.profileOrganization.getText();
         System.out.println(Profile1 + " != " + Profile2 + " = " + ProfileOrganization);
         Assert.assertTrue(!Profile1.equals(Profile2) & Profile2.equals(ProfileOrganization));
+        NowDateEdit = GlobalPage.nowDate();
 
+        page.waitE_ClickableAndClick(page.menuOrganizations);
+        page.sleep(1000);
+        page.moveToProfileOrg(NewName);
+        page.waitE_visibilityOf(page.qrProfOrg);
+
+        page.compareStringAndWebelement(NewName, page.nameProfOrg);
+//       Сокращенное название
+        page.compareStringAndWebelement(NewHead, page.headOrganizationProfOrg);
+        //       Условия
+        //     Профиль
+        String FioDirectorProfOrg = page.directorFirstNameProfOrg.getText() + " " +
+                page.directorSecondNameProfOrg.getText() + " " + page.directorMiddleNameProfOrg.getText();
+        page.compareStringAndString(FIODirector, FioDirectorProfOrg);
+        page.compareStringAndWebelement(Description, page.descriptionProfOrg);
+        page.elementIsDisabled(page.linkDescriptionAdditionalProfOrg);
+        Assert.assertTrue(page.headerStructureProfOrg.isEnabled());
+        Assert.assertTrue(page.headerServicesProfOrg.isEnabled());
+        Assert.assertTrue(page.headerExecutorsProfOrg.isEnabled());
+        Assert.assertTrue(page.mapProfOrg.isEnabled());
+        Assert.assertTrue(page.buttonEditProfOrg.isEnabled());
+        page.compareStringAndWebelement(Address, page.adressProfOrg);
+        //телефоны
+        page.compareStringAndWebelement(Email, page.emailProfOrg);
+        page.compareStringAndWebelement(Vk, page.vkProfOrg);
+        page.compareStringAndWebelement(Instagram, page.instagramProfOrg);
+        page.compareStringAndWebelement(Facebook, page.facebookProfOrg);
+        page.compareStringAndWebelement(Other, page.otherProfOrg);
+        Assert.assertTrue(page.idProfOrg.isEnabled());
+        Assert.assertTrue(driver.getCurrentUrl().contains(page.idProfOrg.getText()));
+        page.compareStringAndWebelement(Code, page.codeProfOrg);
+        page.compareStringAndWebelement(Oms_number, page.numberOmsProfOrg);
+        page.compareStringAndWebelement(Oms_id, page.identifierOmsProfOrg);
+        page.compareStringAndWebelement(Pump, page.identifierPumpProfOrg);
+        if (Status.contains("active")) {
+            StatusRus = "Актуальное";
+        }
+        page.compareStringAndWebelement(StatusRus, page.statusProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.dateCreateProfOrg);
+        page.compareStringAndWebelement(NowDateEdit, page.lastChangeProfOrg);
+        Assert.assertTrue(page.qrProfOrg.isEnabled());
+
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_ClickableAndClick(page.linkDeleteOrganization);
         WebElement NameDeleteOrganization2 = new WebDriverWait(driver, 10).
                 until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
@@ -140,8 +235,17 @@ public class EditOrganizationLogic {
                                            String SecondNameDirectorOrganization,
                                            String FirstNameDirectorOrganization, String MiddleNameDirectorOrganization,
                                            String FIODirector, String NewHead, String ConditionsOrganization,
-                                           String ProfileOrganization) {
+                                           String ProfileOrganization, String Abbr,
+                                           String Help_conditions, String Org_profile, String Description,
+                                           String Address,
+                                           String Email, String Facebook, String Instagram, String Vk,
+                                           String Other, String NamePhone1, String NumberPhone1, String NamePhone2,
+                                           String NumberPhone2, String Code, String Oms_number, String Pump,
+                                           String Oms_id, String Status) {
         page.moveToProfileOrg(Name);
+        page.waitE_visibilityOf(page.nameProfOrg);
+        String Head1 = page.headOrganizationProfOrg.getText();
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_visibilityOf(page.nameOrganization);
         String Name1 = page.nameOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeNameOrganization);
@@ -173,12 +277,15 @@ public class EditOrganizationLogic {
         System.out.println(Director1 + " = " + Director2);
         Assert.assertEquals(Director1, Director2);
 
+//        page.waitE_ClickableAndClick(page.linkChangeHeadOrganization);
+//        page.waitE_ClickableAndClick(page.inputStructureOrganization);
+//        page.waitE_ClickableAndClick(page.bulletHeadOrganization);
+//        page.waitE_ClickableAndClick(page.buttonSaveHeadOrganization);
+//        page.waitE_visibilityOf(page.headOrganization);
+//        String Head1 = page.headOrganization.getText();
+//        page.headOrganizationProfOrg
         page.waitE_ClickableAndClick(page.linkChangeHeadOrganization);
-        page.waitE_ClickableAndClick(page.bulletHeadOrganization);
-        page.waitE_ClickableAndClick(page.buttonSaveHeadOrganization);
-        page.waitE_visibilityOf(page.headOrganization);
-        String Head1 = page.headOrganization.getText();
-        page.waitE_ClickableAndClick(page.linkChangeHeadOrganization);
+        page.waitE_ClickableAndClick(page.inputStructureOrganization);
         page.waitE_ClickableAndClick(page.NameHeadOrganization);
         page.waitE_ClickableAndClick(page.NameDentalCenter);
         page.waitE_ClickableAndClick(page.NameDepartmentTherapeuticStomatology);
@@ -188,7 +295,7 @@ public class EditOrganizationLogic {
         page.waitE_visibilityOf(page.headOrganization);
         String Head2 = page.headOrganization.getText();
         System.out.println(Head1 + " = " + Head2);
-        Assert.assertEquals(Head1, Head2);
+        Assert.assertTrue(Head1.contains(Head2));
 
         String Conditions1 = page.conditionsOrganization.getText();
         page.waitE_ClickableAndClick(page.linkChangeConditionsOrganization);
@@ -220,6 +327,112 @@ public class EditOrganizationLogic {
         Assert.assertEquals(NameDeleteOrganization.getText(), Name);
         page.waitE_ClickableAndClick(page.buttonCancelDelete);
         page.waitE_visibilityOf(page.profileOrganization);
+
+        page.waitE_ClickableAndClick(page.menuOrganizations);
+        page.sleep(1000);
+        page.moveToProfileOrg(Name);
+        page.waitE_visibilityOf(page.qrProfOrg);
+
+        page.compareStringAndWebelement(Name2, page.nameProfOrg);
+//       Сокращенное название
+        Assert.assertTrue(page.headOrganizationProfOrg.getText().contains(Head2));
+        //       Условия
+        //     Профиль
+        String FioDirectorProfOrg = page.directorFirstNameProfOrg.getText() + " " +
+                page.directorSecondNameProfOrg.getText() + " " + page.directorMiddleNameProfOrg.getText();
+        page.compareStringAndString(Director2, FioDirectorProfOrg);
+        page.compareStringAndWebelement(Description, page.descriptionProfOrg);
+        page.elementIsDisabled(page.linkDescriptionAdditionalProfOrg);
+        Assert.assertTrue(page.headerStructureProfOrg.isEnabled());
+        Assert.assertTrue(page.headerServicesProfOrg.isEnabled());
+        Assert.assertTrue(page.headerExecutorsProfOrg.isEnabled());
+        Assert.assertTrue(page.mapProfOrg.isEnabled());
+        Assert.assertTrue(page.buttonEditProfOrg.isEnabled());
+        page.compareStringAndWebelement(Address, page.adressProfOrg);
+        //телефоны
+        page.compareStringAndWebelement(Email, page.emailProfOrg);
+        page.compareStringAndWebelement(Vk, page.vkProfOrg);
+        page.compareStringAndWebelement(Instagram, page.instagramProfOrg);
+        page.compareStringAndWebelement(Facebook, page.facebookProfOrg);
+        page.compareStringAndWebelement(Other, page.otherProfOrg);
+        Assert.assertTrue(page.idProfOrg.isEnabled());
+        Assert.assertTrue(driver.getCurrentUrl().contains(page.idProfOrg.getText()));
+        page.compareStringAndWebelement(Code, page.codeProfOrg);
+        page.compareStringAndWebelement(Oms_number, page.numberOmsProfOrg);
+        page.compareStringAndWebelement(Oms_id, page.identifierOmsProfOrg);
+        page.compareStringAndWebelement(Pump, page.identifierPumpProfOrg);
+        if (Status.contains("active")) {
+            StatusRus = "Актуальное";
+        }
+        page.compareStringAndWebelement(StatusRus, page.statusProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.dateCreateProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.lastChangeProfOrg);
+        Assert.assertTrue(page.qrProfOrg.isEnabled());
+    }
+
+    public void editServicesOrganization(String Name, String Abbr, String CheckedAndFocus, String Checkeds,
+                                         String Indeterminate, String Empty, String Help_conditions,
+                                         String Org_profile, String Description, String Address, String Email,
+                                         String Facebook, String Instagram, String Vk, String Other, String NamePhone1,
+                                         String NumberPhone1, String NamePhone2, String NumberPhone2, String Code,
+                                         String Oms_number, String Pump, String Oms_id, String Status, String Head,
+                                         String FIODirector) {
+        page.moveToProfileOrg(Name);
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
+        page.waitE_ClickableAndClick(page.linkServices);
+        page.waitE_ClickableAndClick(page.linkChangeServices);
+        page.servicess(Abbr, CheckedAndFocus, Checkeds, Indeterminate, Empty);
+        NowDateEdit = GlobalPage.nowDate();
+        page.waitE_ClickableAndClick(page.linkNameOrgEditOrg);
+
+        page.waitE_visibilityOf(page.qrProfOrg);
+        page.compareStringAndWebelement(Name, page.nameProfOrg);
+//       Сокращенное название
+        page.compareStringAndWebelement(Head, page.headOrganizationProfOrg);
+        //       Условия
+        //     Профиль
+        String FioDirectorProfOrg = page.directorFirstNameProfOrg.getText() + " " +
+                page.directorSecondNameProfOrg.getText() + " " + page.directorMiddleNameProfOrg.getText();
+        page.compareStringAndString(FIODirector, FioDirectorProfOrg);
+        page.compareStringAndWebelement(Description, page.descriptionProfOrg);
+        page.elementIsDisabled(page.linkDescriptionAdditionalProfOrg);
+        Assert.assertTrue(page.headerStructureProfOrg.isEnabled());
+        Assert.assertTrue(page.headerServicesProfOrg.isEnabled());
+        page.sleep(2000);
+
+        int x = -1;
+        for (WebElement Service : page.listNamesServicesProfOrg) {
+            x = x + 1;
+            ListServicesInProfile.add(page.listNamesServicesProfOrg.get(x).getText() + " " +
+                    page.listVendorsServicesProfOrg.get(x).getText() + " " + page.listCostsServicesProfOrg.get(x).getText());
+        }
+        System.out.println(page.SelectedServices);
+        System.out.println(ListServicesInProfile);
+        Assert.assertEquals(page.SelectedServices, ListServicesInProfile);
+
+        Assert.assertTrue(page.headerExecutorsProfOrg.isEnabled());
+        Assert.assertTrue(page.mapProfOrg.isEnabled());
+        Assert.assertTrue(page.buttonEditProfOrg.isEnabled());
+        page.compareStringAndWebelement(Address, page.adressProfOrg);
+        //телефоны
+        page.compareStringAndWebelement(Email, page.emailProfOrg);
+        page.compareStringAndWebelement(Vk, page.vkProfOrg);
+        page.compareStringAndWebelement(Instagram, page.instagramProfOrg);
+        page.compareStringAndWebelement(Facebook, page.facebookProfOrg);
+        page.compareStringAndWebelement(Other, page.otherProfOrg);
+        Assert.assertTrue(page.idProfOrg.isEnabled());
+        Assert.assertTrue(driver.getCurrentUrl().contains(page.idProfOrg.getText()));
+        page.compareStringAndWebelement(Code, page.codeProfOrg);
+        page.compareStringAndWebelement(Oms_number, page.numberOmsProfOrg);
+        page.compareStringAndWebelement(Oms_id, page.identifierOmsProfOrg);
+        page.compareStringAndWebelement(Pump, page.identifierPumpProfOrg);
+        if (Status.contains("active")) {
+            StatusRus = "Актуальное";
+        }
+        page.compareStringAndWebelement(StatusRus, page.statusProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.dateCreateProfOrg);
+        page.compareStringAndWebelement(NowDateEdit, page.lastChangeProfOrg);
+        Assert.assertTrue(page.qrProfOrg.isEnabled());
     }
 
 
@@ -228,8 +441,14 @@ public class EditOrganizationLogic {
                                                       String NewAdress, String NewEmail, String NewVk,
                                                       String NewFacebook, String NewInstagram, String NewOther,
                                                       String NewCode, String NewRegistryNumber,
-                                                      String NewIdentifierPUMP, String NewIdentifierOMS) {
+                                                      String NewIdentifierPUMP, String NewIdentifierOMS, String Abbr,
+                                                      String Chief, String Help_conditions, String Org_profile,
+                                                      String Description, String Address, String Email, String Facebook,
+                                                      String Instagram, String Vk, String Other, String Code,
+                                                      String Oms_number, String Pump, String Oms_id, String Status,
+                                                      String Parent, String Head, String FIODirector) {
         page.moveToProfileOrg(Name);
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_ClickableAndClick(page.linkAdditionalInformation);
 
         String Description1 = page.descriptionOrganization.getText();
@@ -323,15 +542,59 @@ public class EditOrganizationLogic {
         Assert.assertTrue(!RegistrationOMS1.equals(RegistrationOMS2) & RegistrationOMS2.equals(NewRegistryNumber));
         Assert.assertTrue(!IdentifikatorPUMP1.equals(IdentifikatorPUMP2) & IdentifikatorPUMP2.equals(NewIdentifierPUMP));
         Assert.assertTrue(!IdentifikatorOMS1.equals(IdentifikatorOMS2) & IdentifikatorOMS2.equals(NewIdentifierOMS));
+
+        NowDateEdit = GlobalPage.nowDate();
+        page.waitE_ClickableAndClick(page.linkNameOrgEditOrg);
+
+        page.compareStringAndWebelement(Name, page.nameProfOrg);
+//       Сокращенное название
+        page.compareStringAndWebelement(Head, page.headOrganizationProfOrg);
+        //       Условия
+        //     Профиль
+        String FioDirectorProfOrg = page.directorFirstNameProfOrg.getText() + " " +
+                page.directorSecondNameProfOrg.getText() + " " + page.directorMiddleNameProfOrg.getText();
+        page.compareStringAndString(FIODirector, FioDirectorProfOrg);
+        page.compareStringAndWebelement(DescriptionOrganization, page.descriptionProfOrg);
+        page.elementIsDisabled(page.linkDescriptionAdditionalProfOrg);
+        Assert.assertTrue(page.headerStructureProfOrg.isEnabled());
+        Assert.assertTrue(page.headerServicesProfOrg.isEnabled());
+        Assert.assertTrue(page.headerExecutorsProfOrg.isEnabled());
+        Assert.assertTrue(page.mapProfOrg.isEnabled());
+        Assert.assertTrue(page.buttonEditProfOrg.isEnabled());
+        page.compareStringAndWebelement(NewAdress, page.adressProfOrg);
+        //телефоны
+        page.compareStringAndWebelement(NewEmail, page.emailProfOrg);
+        page.compareStringAndWebelement(NewVk, page.vkProfOrg);
+        page.compareStringAndWebelement(NewInstagram, page.instagramProfOrg);
+        page.compareStringAndWebelement(NewFacebook, page.facebookProfOrg);
+        page.compareStringAndWebelement(NewOther, page.otherProfOrg);
+        Assert.assertTrue(page.idProfOrg.isEnabled());
+        Assert.assertTrue(driver.getCurrentUrl().contains(page.idProfOrg.getText()));
+        page.compareStringAndWebelement(NewCode, page.codeProfOrg);
+        page.compareStringAndWebelement(NewRegistryNumber, page.numberOmsProfOrg);
+        page.compareStringAndWebelement(NewIdentifierOMS, page.identifierOmsProfOrg);
+        page.compareStringAndWebelement(NewIdentifierPUMP, page.identifierPumpProfOrg);
+        if (Status.contains("active")) {
+            StatusRus = "Актуальное";
+        }
+        page.compareStringAndWebelement(StatusRus, page.statusProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.dateCreateProfOrg);
+        page.compareStringAndWebelement(NowDateEdit, page.lastChangeProfOrg);
+        Assert.assertTrue(page.qrProfOrg.isEnabled());
     }
 
+
     public void editAdditionalInformationOrganizationCancel(String Name, String DescriptionOrganization,
-                                                      String NewAppointmentPhone1, String NewNumberPhone1,
-                                                      String NewAdress, String NewEmail, String NewVk,
-                                                      String NewFacebook, String NewInstagram, String NewOther,
-                                                      String NewCode, String NewRegistryNumber,
-                                                      String NewIdentifierPUMP, String NewIdentifierOMS) {
+                                                            String NewAppointmentPhone1, String NewNumberPhone1,
+                                                            String NewAdress, String NewEmail, String NewVk,
+                                                            String NewFacebook, String NewInstagram, String NewOther,
+                                                            String NewCode, String NewRegistryNumber,
+                                                            String NewIdentifierPUMP, String NewIdentifierOMS,
+                                                            String Status, String Head, String FIODirector, String Address, String Email, String Facebook,
+                                                            String Instagram, String Vk, String Other, String Code, String Oms_number, String Pump,
+                                                            String Oms_id, String Description) {
         page.moveToProfileOrg(Name);
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_ClickableAndClick(page.linkAdditionalInformation);
 
         String Description1 = page.descriptionOrganization.getText();
@@ -419,11 +682,53 @@ public class EditOrganizationLogic {
         Assert.assertEquals(RegistrationOMS1, RegistrationOMS2);
         Assert.assertEquals(IdentifikatorPUMP1, IdentifikatorPUMP2);
         Assert.assertEquals(IdentifikatorOMS1, IdentifikatorOMS2);
+
+        NowDateEdit = GlobalPage.nowDate();
+        page.waitE_ClickableAndClick(page.linkNameOrgEditOrg);
+
+        page.compareStringAndWebelement(Name, page.nameProfOrg);
+//       Сокращенное название
+        page.compareStringAndWebelement(Head, page.headOrganizationProfOrg);
+        //       Условия
+        //     Профиль
+        String FioDirectorProfOrg = page.directorFirstNameProfOrg.getText() + " " +
+                page.directorSecondNameProfOrg.getText() + " " + page.directorMiddleNameProfOrg.getText();
+        page.compareStringAndString(FIODirector, FioDirectorProfOrg);
+        page.compareStringAndWebelement(Description, page.descriptionProfOrg);
+        page.elementIsDisabled(page.linkDescriptionAdditionalProfOrg);
+        Assert.assertTrue(page.headerStructureProfOrg.isEnabled());
+        Assert.assertTrue(page.headerServicesProfOrg.isEnabled());
+        Assert.assertTrue(page.headerExecutorsProfOrg.isEnabled());
+        Assert.assertTrue(page.mapProfOrg.isEnabled());
+        Assert.assertTrue(page.buttonEditProfOrg.isEnabled());
+        page.compareStringAndWebelement(Address, page.adressProfOrg);
+        //телефоны
+        page.compareStringAndWebelement(Email, page.emailProfOrg);
+        page.compareStringAndWebelement(Vk, page.vkProfOrg);
+        page.compareStringAndWebelement(Instagram, page.instagramProfOrg);
+        page.compareStringAndWebelement(Facebook, page.facebookProfOrg);
+        page.compareStringAndWebelement(Other, page.otherProfOrg);
+        Assert.assertTrue(page.idProfOrg.isEnabled());
+        Assert.assertTrue(driver.getCurrentUrl().contains(page.idProfOrg.getText()));
+        page.compareStringAndWebelement(Code, page.codeProfOrg);
+        page.compareStringAndWebelement(Oms_number, page.numberOmsProfOrg);
+        page.compareStringAndWebelement(Oms_id, page.identifierOmsProfOrg);
+        page.compareStringAndWebelement(Pump, page.identifierPumpProfOrg);
+        if (Status.contains("active")) {
+            StatusRus = "Актуальное";
+        }
+        page.compareStringAndWebelement(StatusRus, page.statusProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.dateCreateProfOrg);
+        page.compareStringAndWebelement(NowDateCreate, page.lastChangeProfOrg);
+        Assert.assertTrue(page.qrProfOrg.isEnabled());
     }
+
+
 
     public void editPhonesOrganization(String Name, String NamePhone1, String NumberPhone1,
                                        String NewAppointmentPhone2, String NewNumberPhone2) {
         page.moveToProfileOrg(Name);
+        page.waitE_ClickableAndClick(page.buttonEditOrganization);
         page.waitE_ClickableAndClick(page.linkAdditionalInformation);
         page.waitE_ClickableAndClick(page.linkChangePhoneOrganization);
         page.waitE_ClickableAndClick(page.linkAddPhone);

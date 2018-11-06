@@ -1,19 +1,29 @@
 package historychanges;
 
+import edituser.EditUserPage;
 import global.EnvironmentUser;
 import global.GlobalPage;
 import junitparams.JUnitParamsRunner;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import utils.ConfigProperties;
+
+import java.io.File;
+import java.util.logging.Level;
 
 @RunWith(JUnitParamsRunner.class)
 public class HistoryChangesLogic {
@@ -27,19 +37,27 @@ public class HistoryChangesLogic {
 
         @Override
         protected void starting(Description description) {
-            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments(ConfigProperties.getTestProperty("head"));
-            options.addArguments("window-size=1200,800");
-            driver = new ChromeDriver(options);
-            page = new HistoryChangesPage(driver);
-            driver.get(ConfigProperties.getTestProperty("baseurl"));
-            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+//            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments(ConfigProperties.getTestProperty("head"));
+//            options.addArguments("window-size=1200,800");
+//            driver = new ChromeDriver(options);
+//            page = new HistoryChangesPage(driver);
+//            driver.get(ConfigProperties.getTestProperty("baseurl"));
+//            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
         }
 
         @Override
         protected void finished(Description description) {
-            driver.quit();
+            try {
+                page.waitE_ClickableAndClick(page.menuCreateWorker);
+            } catch (TimeoutException e) {
+                System.out.println(e);
+                page.waitE_ClickableAndClick(page.menuWorkers);
+                page.waitE_ClickableAndClick(page.menuCreateWorker);
+            }
+            driver.navigate().refresh();
+//            driver.quit();
         }
 
         @Override
@@ -48,11 +66,39 @@ public class HistoryChangesLogic {
         }
     };
 
+    @BeforeClass
+    public static void beforClass() {
+        System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(ConfigProperties.getTestProperty("head"));
+        options.addArguments("window-size=1200,800");
+
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        driver = new ChromeDriver(options);
+        page = new HistoryChangesPage(driver);
+        driver.get(ConfigProperties.getTestProperty("baseurl"));
+        driver.manage().logs().get(LogType.BROWSER);
+        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        driver.quit();
+    }
+
     public void logLogin() {
         String NowDate = page.nowDate();
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
         Assert.assertTrue(page.columnTime.size() > 0);
@@ -77,8 +123,13 @@ public class HistoryChangesLogic {
 
     public void logLogout() {
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
         page.waitE_ClickableAndClick(page.listActionProfile);
@@ -112,13 +163,22 @@ public class HistoryChangesLogic {
 
     public void logCreate(String Login, String Password, String Email, String Phone, String Status, String SecondName
             , String FirstName, String MiddleName, String Superuser) {
+        page.waitE_ClickableAndClick(page.userinfoname);
+        page.waitE_ClickableAndClick(page.listActionProfileExit);
+        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+
         int i = -1;
         EnvironmentUser.login();
         EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         String NowDate = page.nowDate();
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -179,8 +239,13 @@ public class HistoryChangesLogic {
 
     public void logNoUnknown() {
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -209,52 +274,100 @@ public class HistoryChangesLogic {
     }
 
     public void logSumReportsDefoulte() {
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } ;
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
         System.out.println("Количество строк: " + page.columnAction.size());
         Assert.assertTrue("Количество записей по-умолчанию не равно 10", page.columnAction.size() == 10);
     }
 
-    public void popoverInfoBlock(String Login, String Email, String Phone, String Password, String Status,
+    public void popoverInfoBlock(String Login, String Password, String Email, String Phone, String Status,
                                  String SecondName, String FirstName, String MiddleName, String Superuser) {
         EnvironmentUser.login();
-        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         System.out.println("1");
-        page.waitE_ClickableAndClick(page.listActionProfile);
-        page.waitE_ClickableAndClick(page.listActionProfileExit);
-        driver.get(ConfigProperties.getTestProperty("baseurl"));
-        page.auth(Login, Password);
-        System.out.println("2");
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+//        page.waitE_ClickableAndClick(page.listActionProfile);
+//        page.waitE_ClickableAndClick(page.listActionProfileExit);
+//        driver.get(ConfigProperties.getTestProperty("baseurl"));
+//        page.auth(Login, Password);
+//        System.out.println("2");
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
         System.out.println("3");
         page.sleep(1000);
-        page.waitE_ClickableAndClick(page.columnInitiator.get(0));
-        page.waitE_visibilityOf(page.popoverPhone);
-        System.out.println("4");
+//        page.waitE_ClickableAndClick(page.columnInitiator.get(0));
 
+
+        for (WebElement Object : page.columnObject) {
+            System.out.println(Object.getText());
+            if (Object.getText().equals(SecondName + " " + FirstName + " " + MiddleName)) {
+                page.waitE_ClickableAndClick(Object);
+                page.waitE_visibilityOf(page.popoverPhone);
+                System.out.println("4");
+                break;
+            }
+        }
         System.out.println(page.popoverPhone.getText() + " = " + Phone);
-        Assert.assertTrue(page.popoverPhone.getText().equals(Phone));
+        Assert.assertEquals(page.popoverPhone.getText(), Phone);
 
         System.out.println(page.popoverEmail.getText() + " = " + Email);
-        Assert.assertTrue(page.popoverEmail.getText().equals(Email));
+        Assert.assertEquals(page.popoverEmail.getText(), Email);
 
 
         page.waitE_ClickableAndClick(page.popoverMore);
         page.waitE_visibilityOf(page.userinfoname);
-        System.out.println(page.userinfoname.getText() + " = " + SecondName + " " + FirstName + " " + MiddleName);
-        Assert.assertTrue(page.userinfoname.getText().equals(SecondName + " " + FirstName + " " + MiddleName));
+        page.sleep(500);
+        System.out.println(page.fioUser.getText() + " = " + SecondName + " " + FirstName + " " + MiddleName);
+        Assert.assertEquals(page.fioUser.getText(), SecondName + " " + FirstName + " " + MiddleName);
+
+        driver.navigate().back();
+        page.waitE_visibilityOf(page.marker10History);
+
+        for (WebElement Initiator : page.columnInitiator) {
+            if (Initiator.getText().equals("Акулин Аристарх Анатольевич")) {
+                page.waitE_ClickableAndClick(Initiator);
+                page.waitE_visibilityOf(page.popoverPhone);
+                System.out.println("5");
+                break;
+            }
+        }
+        System.out.println(page.popoverPhone.getText() + " = +7 (123) 456-78-99");
+        Assert.assertEquals("+7 (123) 456-78-99", page.popoverPhone.getText());
+
+        System.out.println(page.popoverEmail.getText() + " = ioanner@mail.ru");
+        Assert.assertEquals("ioanner@mail.ru", page.popoverEmail.getText());
+
+
+        page.waitE_ClickableAndClick(page.popoverMore);
+        page.waitE_visibilityOf(page.userinfoname);
+        System.out.println(page.fioUser.getText() + " = Акулин Аристарх Анатольевич");
+        Assert.assertEquals("Акулин Аристарх Анатольевич", page.fioUser.getText());
+
     }
 
     public void moreInfoBlockLogin() {
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -303,8 +416,13 @@ public class HistoryChangesLogic {
 
     public void moreInfoBlockLogout() {
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -361,8 +479,13 @@ public class HistoryChangesLogic {
                 SecondName, FirstName, MiddleName, Superuser);
         EnvironmentUser.profileUserAPI(Depart, Post, Ref, Role, Status, Specialities, Regalia, EmailCont, PhoneCont,
                 Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -425,8 +548,13 @@ public class HistoryChangesLogic {
         EnvironmentUser.login();
         EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
                 Superuser);
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
 
@@ -472,8 +600,13 @@ public class HistoryChangesLogic {
     }
 
     public void popover() {
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.sleep(1000);
         page.waitE_ClickableAndClick(page.questionInitiator);
@@ -498,8 +631,13 @@ public class HistoryChangesLogic {
         int SumAction4case5 = 0; int SumAction5case5 = 0;
 
         int i = -1;
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_ClickableAndClick(page.inputAction);
         page.sleep(1000);
@@ -528,6 +666,7 @@ public class HistoryChangesLogic {
                 page.waitE_ClickableAndClick(page.buttonLoadMore);
                 System.out.println("Количество строк: " + page.columnAction.size());
             }
+
             for (WebElement actionOne : page.columnAction) {
                 System.out.println("i= " + i);
                 switch (i) {
@@ -681,8 +820,13 @@ public class HistoryChangesLogic {
     public void actionFilterCalendar() {
         int i = -1;
 
-        page.waitE_ClickableAndClick(page.menuWorkers);
-        page.waitE_ClickableAndClick(page.buttonUserList);
+        try {
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        } catch (TimeoutException e) {
+            System.out.println(e);
+            page.waitE_ClickableAndClick(page.menuWorkers);
+            page.waitE_ClickableAndClick(page.buttonUserList);
+        }
         page.waitE_ClickableAndClick(page.linkHistoryChanges);
         page.waitE_visibilityOf(page.marker10History);
         page.waitE_ClickableAndClick(page.calendar);
@@ -875,10 +1019,10 @@ public class HistoryChangesLogic {
         }
     }
 
-    public void popoverInfoBlockUser(String Login, String Email, String Phone, String Password, String Status,
+    public void popoverInfoBlockUser(String Login, String Password, String Email, String Phone, String Status,
                                      String SecondName, String FirstName, String MiddleName, String Superuser) {
         EnvironmentUser.login();
-        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser);
         System.out.println("1");
         page.waitE_ClickableAndClick(page.listActionProfile);
@@ -905,6 +1049,10 @@ public class HistoryChangesLogic {
         page.waitE_visibilityOf(page.userinfoname);
         System.out.println(page.userinfoname.getText() + " = " + SecondName + " " + FirstName + " " + MiddleName);
         Assert.assertTrue(page.userinfoname.getText().equals(SecondName + " " + FirstName + " " + MiddleName));
+
+        page.waitE_ClickableAndClick(page.listActionProfile);
+        page.waitE_ClickableAndClick(page.listActionProfileExit);
+        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
     }
 
     public void moreInfoBlockLoginUser(String SecondName) {
@@ -1134,6 +1282,10 @@ public class HistoryChangesLogic {
         page.waitE_ClickableAndClick(page.questionObject);
         System.out.println(page.popoverObject.getText() + " =  Над кем совершают действие.");
         Assert.assertTrue(page.popoverObject.getText().equals("Над кем совершают действие."));
+//        File file = new File("/home/alex/Dropbox/IdeaProjects/LionsDigital/Files/2002.png");
+//        if (file.exists()) {
+//            System.out.println(page.getFileSizeKiloBytes(file));
+//        } else System.out.println("Файла нет!");
     }
 
     public void actionFilterUser(String SecondName) {
@@ -1183,16 +1335,14 @@ public class HistoryChangesLogic {
                 System.out.println("i= " + i);
                 switch (i) {
                     case 0:
-
-
                         System.out.println(actionOne.getText() + " = " + Action0);
                         Assert.assertEquals(actionOne.getText(), Action0);
                         if (actionOne.getText().equals(Action0)) {
                             SumAction0case0 = SumAction0case0 + 1;
                         }
                         break;
-                    case 1:
 
+                    case 1:
                         System.out.println(actionOne.getText() + " = " + Action0 + " или " + Action1);
                         Assert.assertTrue(actionOne.getText().equals(Action0) | actionOne.getText().equals(Action1));
                         if (actionOne.getText().equals(Action0)) {
@@ -1373,7 +1523,7 @@ public class HistoryChangesLogic {
 
     public void allReportToYearAPIUser() {
         EnvironmentUser.login();
-        EnvironmentUser.BigDataAPI();
+        EnvironmentUser.BigDataAPIUser();
     }
 
 }

@@ -9,13 +9,13 @@ public class AutorizationTest extends AutorizationLogic {
             "Shavermay61| 6simbo| Коршунов Игорь Эдуардович         | Shavermay61 | al1911@mail.ru | +79862648361 | active| Коршунов | Игорь | Эдуардович | true",
             "+79887515198| bB8jL9aD3| Игроков Иван Михайлович       | KjdhnUL86 | al19U7IN@mail.ru | +79887515198 | active| Игроков | Иван | Михайлович | true",
 //            "89097898361| 98jlkIHO| Мурзилкин Антон Игоревич      | 9JHghj76 | a2klIN@mail.ru | +79097898361 | active| Мурзилкин | Антон | Игоревич | true",
-//            "79097898361| bB8jkjkjh8| Комбат Михаил Суздальевич   | mnIOJjh87 | jhk8fgN@yandex.ru | +79097898361 | active| Мурзилкин | Антон | Игоревич | true",
-//            "9094896871| jkho98gJ| Мориарти Джек Андреевич        | lkUYIHbnk | jhk8fgN@yandex.ru | +79094896871 | active| Мурзилкин | Антон | Игоревич | true",
-            "rontra@yandex.ru| lksjai897jK| Трешев Акакий Егорович   | 908JHJjkhoia | rontra@yandex.ru | +7909297271 | active| Трешев | Акакий | Егорович | true",
+//            "79097898361| bB8jkjkjh8| Комбат Михаил Суздальевич   | mnIOJjh87 | jhk8fgN@yandex.ru | +79097898361 | active| Комбат | Михаил | Суздальевич | true",
+//            "9094896871| jkho98gJ| Карамзин Евгений Павлович        | lkUYIHbnk | jhk8fgN@yandex.ru | +79094896871 | active| Карамзин | Евгений | Павлович | true",
+            "rontra@yandex.ru| lksjai897jK| Трешев Аркадий Егорович   | 908JHJjkhoia | rontra@yandex.ru | +7909297271 | active| Трешев | Аркадий | Егорович | true",
     })
     public void succesAutorization(String LoginInput, String Password, String Phrase, String Login, String Email, String Phone, String Status, String SecondName, String FirstName, String MiddleName, String Superuser) {
         EnvironmentUser.login();
-        EnvironmentUser.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName, Superuser);
+        EnvironmentUser.createUserAPI(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName, Superuser);
         sucsses(LoginInput, Password, Phrase);
     }
 

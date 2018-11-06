@@ -1,6 +1,8 @@
 package autorization;
 
 import junitparams.JUnitParamsRunner;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -29,26 +31,27 @@ public class AutorizationLogic {
         @Override
         protected void starting(Description description) {
 
-            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments(ConfigProperties.getTestProperty("head"));
-            options.addArguments("window-size=1200,800");
-
-            LoggingPreferences logPrefs = new LoggingPreferences();     //
-            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);            //
-            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);  //
-
-
-            driver = new ChromeDriver(options);
-            page = new AutorizationPage(driver);
+//            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments(ConfigProperties.getTestProperty("head"));
+//            options.addArguments("window-size=1200,800");
+//
+//            LoggingPreferences logPrefs = new LoggingPreferences();
+//            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+//            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+//
+//
+//            driver = new ChromeDriver(options);
+//            page = new AutorizationPage(driver);
             driver.get(ConfigProperties.getTestProperty("baseurl"));
-            driver.manage().logs().get(LogType.BROWSER);        //
+//            driver.manage().logs().get(LogType.BROWSER);
 
         }
 
         @Override
         protected void finished(Description description) {
-            driver.quit();
+            driver.navigate().refresh();
+         //            driver.quit();
         }
 
         @Override
@@ -56,6 +59,29 @@ public class AutorizationLogic {
             captureScreenshot(description.getMethodName());
         }
     };
+
+
+    @BeforeClass
+    public static void beforClass() {
+        System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(ConfigProperties.getTestProperty("head"));
+        options.addArguments("window-size=1200,800");
+
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        driver = new ChromeDriver(options);
+        page = new AutorizationPage(driver);
+        driver.get(ConfigProperties.getTestProperty("baseurl"));
+        driver.manage().logs().get(LogType.BROWSER);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        driver.quit();
+    }
 
     private void captureScreenshot(String Name) {
         page.screenFailedTest(Name);
@@ -66,9 +92,13 @@ public class AutorizationLogic {
 //        page.waitE_ClickableAndClick(page.authButtonEnter);
         page.autorization(page.userinfoname, phrase);
 
-        String scriptToExecute = "var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;";
-        String netData = ((JavascriptExecutor)driver).executeScript(scriptToExecute).toString();
+        String scriptToExecute = "var performance = window.performance || window.mozPerformance || window" +
+                ".msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; " +
+                "return network;";
+        String netData = ((JavascriptExecutor) driver).executeScript(scriptToExecute).toString();
         System.out.println(netData);
+        page.waitE_ClickableAndClick(page.userinfoname);
+        page.waitE_ClickableAndClick(page.listActionProfileExit);
 
     }
 
@@ -87,11 +117,4 @@ public class AutorizationLogic {
 //        page.waitE_ClickableAndClick(page.authButtonEnter);
         page.autorization(page.errorloginpassword, phrase);
     }
-
-//    @BeforeClass
-//    public static void beforClass() {
-//
-//                //        TestEnvironmentTest.environment();
-////        EnvironmentUser.createUserAPI();
-//    }
 }

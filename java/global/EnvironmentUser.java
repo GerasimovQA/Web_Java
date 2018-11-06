@@ -38,7 +38,7 @@ public class EnvironmentUser {
         System.out.println("Получили токен: " + Token);
     }
 
-    public static void createUserAPI(String Login, String Email, String Phone, String Password, String Status,
+    public static void createUserAPI(String Login, String Password, String Email, String Phone, String Status,
                                      String SecondName, String FirstName, String MiddleName, String Superuser) {
 
         Map<String, Object> jsonAsMapPassport = new HashMap<>();
@@ -77,14 +77,16 @@ public class EnvironmentUser {
 //        Map<String, Object> jsonAsMapProfilechildren = new HashMap<>();
         Map<String, Object> jsonAsMapProfileContact = new HashMap<>();
         Map<String, Object> jsonAsMapProfileSpecialities = new HashMap<>();
-        String SpecList[] = {Specialities};
+        Map SpecList[] = {jsonAsMapProfileSpecialities};
 //        ArrayList arrayList = jsonAsMapProfileworkplaces;
 //        String Workplaces[] = {jsonAsMapProfileworkplaces};
         Map Workplaces[] = {jsonAsMapProfileworkplaces};
 
+
         jsonAsMapProfile.put("user_id", UserID);
         jsonAsMapProfile.put("workplaces", Workplaces);
-        jsonAsMapProfile.put("specialities", jsonAsMapProfileSpecialities);
+//        jsonAsMapProfile.put("specialities", jsonAsMapProfileSpecialities);
+        jsonAsMapProfile.put("specialities", SpecList);
 
 
         jsonAsMapProfileworkplaces.put("depart", Depart);
@@ -92,7 +94,7 @@ public class EnvironmentUser {
         jsonAsMapProfileworkplaces.put("ref", Ref);
         jsonAsMapProfileworkplaces.put("role", Role);
         jsonAsMapProfileworkplaces.put("status", Status);
-        jsonAsMapProfileSpecialities.put("specialities", SpecList);
+        jsonAsMapProfileSpecialities.put("id", Specialities);
 //        jsonAsMapProfile.put("services", jsonAsMapProfileservices);
 //        jsonAsMapProfileservices.put("label", Label);
 //        jsonAsMapProfileservices.put("id", ID);
@@ -150,9 +152,9 @@ public class EnvironmentUser {
                         header("Authorization", "Bearer " + Token).
                         queryParam("limit", "10000").
                         queryParam("offset", "0").
-                        queryParam("obj_id", "5b58130f0faa2638b94fc4d7").
-                        queryParam("t_beg", "2017-08-31T20:00:00.000Z").
-                        queryParam("t_end", "2018-09-01T19:59:59.000Z").
+//                        queryParam("obj_id", "5b58130f0faa2638b94fc4d7").
+                        queryParam("t_beg", "2017-10-09T20:00:00.000Z").
+                        queryParam("t_end", "2018-10-10T19:59:59.000Z").
                         contentType(ContentType.JSON).
                         baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("passport/admin/hist").
                         when().get().
@@ -179,12 +181,58 @@ public class EnvironmentUser {
             LocalDate date = LocalDate.parse(StringDate, formatter);
             System.out.println(date);
 
-            LocalDate StartDate = LocalDate.of(2017, 8, 31);
-            LocalDate EndtDate = LocalDate.of(2018, 9, 1);
+            LocalDate StartDate = LocalDate.of(2017, 10, 9);
+            LocalDate EndtDate = LocalDate.of(2018, 10, 11);
             System.out.println(date + " больше " + StartDate + " и меньше " + EndtDate);
             Assert.assertTrue(date.isAfter(StartDate) & date.isBefore(EndtDate));
         }
         System.out.println("Количество записей: " + listdata.size());
         System.out.println(listdata);
     }
+
+    public static void BigDataAPIUser() {
+
+        Response response =
+                given().log().all().
+                        header("Authorization", "Bearer " + Token).
+                        queryParam("limit", "10000").
+                        queryParam("offset", "0").
+                        queryParam("obj_id", "5b58130f0faa2638b94fc4d7").
+                        queryParam("t_beg", "2017-10-09T20:00:00.000Z").
+                        queryParam("t_end", "2018-10-10T19:59:59.000Z").
+                        contentType(ContentType.JSON).
+                        baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("passport/admin/hist").
+                        when().get().
+                        then().extract().response();
+
+        System.out.println("История изменений за указанный срок: " + response.getBody().asString());
+
+        ArrayList ListId = new ArrayList<>();
+        List<String> listdata = new ArrayList<>();
+
+        ListId.add(response.path("hist.ts"));
+        String[] subStr;
+        String delimeter = ","; // Разделитель
+        subStr = ListId.get(0).toString().split(delimeter);
+
+        for (int i = 0; i < subStr.length; i++) {
+            listdata.add(subStr[i]);
+
+            int index = subStr[i].indexOf("T");
+            String StringDate = subStr[i].substring(0, index).replace(" ", "")
+                    .replace("[", "").replace("]", "");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+            LocalDate date = LocalDate.parse(StringDate, formatter);
+            System.out.println(date);
+
+            LocalDate StartDate = LocalDate.of(2017, 10, 9);
+            LocalDate EndtDate = LocalDate.of(2018, 10, 11);
+            System.out.println(date + " больше " + StartDate + " и меньше " + EndtDate);
+            Assert.assertTrue(date.isAfter(StartDate) & date.isBefore(EndtDate));
+        }
+        System.out.println("Количество записей: " + listdata.size());
+        System.out.println(listdata);
+    }
+
 }

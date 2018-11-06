@@ -1,48 +1,61 @@
 package edituser;
 
+import editorganization.EditOrganizationPage;
 import global.Ashot;
 import global.GlobalPage;
 import junitparams.JUnitParamsRunner;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import utils.ConfigProperties;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
 public class EditUserLogic {
 
+    int u = 0;
+
     private static WebDriver driver;
     private static EditUserPage page;
-
+    private ArrayList<String> SelectedSpecialtys = new ArrayList<>();
+    private ArrayList<String> SavedSpecialtys = new ArrayList<>();
 
     @Rule
     public TestRule screenshotRule = new TestWatcher() {
 
         @Override
         protected void starting(Description description) {
-            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments(ConfigProperties.getTestProperty("head"));
-            options.addArguments("window-size=1200,800");
-            driver = new ChromeDriver(options);
-            page = new EditUserPage(driver);
-            driver.get(ConfigProperties.getTestProperty("baseurl"));
-            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+//            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments(ConfigProperties.getTestProperty("head"));
+//            options.addArguments("window-size=1200,800");
+//            driver = new ChromeDriver(options);
+//            page = new EditUserPage(driver);
+//            driver.get(ConfigProperties.getTestProperty("baseurl"));
+//            page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
         }
 
         @Override
         protected void finished(Description description) {
-            driver.quit();
+            page.SelectedServices.clear();
+            driver.navigate().refresh();
+//            driver.quit();
         }
 
         @Override
@@ -50,6 +63,29 @@ public class EditUserLogic {
             page.captureScreenshot(description.getMethodName());
         }
     };
+
+    @BeforeClass
+    public static void beforClass() {
+        System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(ConfigProperties.getTestProperty("head"));
+        options.addArguments("window-size=1200,800");
+
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        driver = new ChromeDriver(options);
+        page = new EditUserPage(driver);
+        driver.get(ConfigProperties.getTestProperty("baseurl"));
+        driver.manage().logs().get(LogType.BROWSER);
+        page.auth(GlobalPage.LoginAUT, GlobalPage.PasswordAUT);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        driver.quit();
+    }
 
     public void editWorkerFio(String SecondName, String NewSecondName, String NewFirstName, String NewMiddleName) {
         page.moveToProfileUserChange(SecondName);
@@ -71,13 +107,13 @@ public class EditUserLogic {
         page.sleep(500);
 
         System.out.println(page.secondNameProfile.getText() + " = " + NewSecondName);
-        Assert.assertTrue(page.secondNameProfile.getText().equals(NewSecondName));
+        Assert.assertEquals(page.secondNameProfile.getText(), NewSecondName);
 
         System.out.println(page.firstNameProfile.getText() + " = " + NewFirstName);
-        Assert.assertTrue(page.firstNameProfile.getText().equals(NewFirstName));
+        Assert.assertEquals(page.firstNameProfile.getText(), NewFirstName);
 
         System.out.println(page.middleNameProfile.getText() + " = " + NewMiddleName);
-        Assert.assertTrue(page.middleNameProfile.getText().equals(NewMiddleName));
+        Assert.assertEquals(page.middleNameProfile.getText(), NewMiddleName);
     }
 
     public void editWorkerFioCancel(String SecondName, String NewSecondName, String NewFirstName,
@@ -99,13 +135,13 @@ public class EditUserLogic {
         page.waitE_ClickableAndClick(page.buttonCancelProfile);
         page.waitE_visibilityOf(page.firstNameProfile);
         System.out.println(page.secondNameProfile.getText() + " = " + Secondname);
-        Assert.assertTrue(page.secondNameProfile.getText().equals(Secondname));
+        Assert.assertEquals(page.secondNameProfile.getText(), Secondname);
 
         System.out.println(page.firstNameProfile.getText() + " = " + Firstname);
-        Assert.assertTrue(page.firstNameProfile.getText().equals(Firstname));
+        Assert.assertEquals(page.firstNameProfile.getText(), Firstname);
 
         System.out.println(page.middleNameProfile.getText() + " = " + Middlename);
-        Assert.assertTrue(page.middleNameProfile.getText().equals(Middlename));
+        Assert.assertEquals(page.middleNameProfile.getText(), Middlename);
     }
 
     public void editWorkerFioDeleteMiddlename(String SecondName) {
@@ -132,10 +168,10 @@ public class EditUserLogic {
         page.waitE_visibilityOf(page.firstNameProfile);
         page.sleep(5000);
         System.out.println(page.secondNameProfile.getText() + " = " + Secondname);
-        Assert.assertTrue(page.secondNameProfile.getText().equals(Secondname));
+        Assert.assertEquals(page.secondNameProfile.getText(), Secondname);
 
         System.out.println(page.firstNameProfile.getText() + " = " + Firstname);
-        Assert.assertTrue(page.firstNameProfile.getText().equals(Firstname));
+        Assert.assertEquals(page.firstNameProfile.getText(), Firstname);
 
         try {
             Assert.assertTrue("Отчество найдено", !page.middleNameProfile.isEnabled());
@@ -162,13 +198,13 @@ public class EditUserLogic {
         page.waitE_visibilityOf(page.firstNameProfile);
 
         System.out.println(page.secondNameProfile.getText() + " = " + Secondname);
-        Assert.assertTrue(page.secondNameProfile.getText().equals(Secondname));
+        Assert.assertEquals(page.secondNameProfile.getText(), Secondname);
 
         System.out.println(page.firstNameProfile.getText() + " = " + Firstname);
-        Assert.assertTrue(page.firstNameProfile.getText().equals(Firstname));
+        Assert.assertEquals(page.firstNameProfile.getText(), Firstname);
 
         System.out.println(page.middleNameProfile.getText() + " = " + Middlename);
-        Assert.assertTrue(page.middleNameProfile.getText().equals(Middlename));
+        Assert.assertEquals(page.middleNameProfile.getText(), Middlename);
     }
 
     public void editWorkerLoginEmailPhone(String SecondName, String NewLogin, String NewEmail, String NewPhone) {
@@ -191,13 +227,14 @@ public class EditUserLogic {
         page.sleep(2000);
 
         System.out.println(page.loginProfile.getText() + " = " + NewLogin);
-        Assert.assertTrue(page.loginProfile.getText().equals(NewLogin));
+        assertEquals(page.loginProfile.getText(), NewLogin);
 
         System.out.println(page.emailProfile.getText() + " = " + NewEmail);
-        Assert.assertTrue(page.emailProfile.getText().equals(NewEmail));
+        assertEquals(page.emailProfile.getText(), NewEmail);
 
         System.out.println(page.phoneProfile.getText() + " = " + "+7 (" + NewPhone.charAt(0) + NewPhone.charAt(1) + NewPhone.charAt(2) + ") " + NewPhone.charAt(3) + NewPhone.charAt(4) + NewPhone.charAt(5) + "-" + NewPhone.charAt(6) + NewPhone.charAt(7) + "-" + NewPhone.charAt(8) + NewPhone.charAt(9));
-        Assert.assertTrue(page.phoneProfile.getText().equals("+7 (" + NewPhone.charAt(0) + NewPhone.charAt(1) + NewPhone.charAt(2) + ") " + NewPhone.charAt(3) + NewPhone.charAt(4) + NewPhone.charAt(5) + "-" + NewPhone.charAt(6) + NewPhone.charAt(7) + "-" + NewPhone.charAt(8) + NewPhone.charAt(9)));
+        assertEquals(page.phoneProfile.getText(),
+                "+7 (" + NewPhone.charAt(0) + NewPhone.charAt(1) + NewPhone.charAt(2) + ") " + NewPhone.charAt(3) + NewPhone.charAt(4) + NewPhone.charAt(5) + "-" + NewPhone.charAt(6) + NewPhone.charAt(7) + "-" + NewPhone.charAt(8) + NewPhone.charAt(9));
 
     }
 
@@ -221,13 +258,13 @@ public class EditUserLogic {
         page.sleep(2000);
 
         System.out.println(page.loginProfile.getText() + " = " + Login);
-        Assert.assertTrue(page.loginProfile.getText().equals(Login));
+        Assert.assertEquals(page.loginProfile.getText(), Login);
 
         System.out.println(page.emailProfile.getText() + " = " + Email);
-        Assert.assertTrue(page.emailProfile.getText().equals(Email));
+        Assert.assertEquals(page.emailProfile.getText(), Email);
 
         System.out.println(page.phoneProfile.getText() + " = " + Phone);
-        Assert.assertTrue(page.phoneProfile.getText().equals(Phone));
+        Assert.assertEquals(page.phoneProfile.getText(), Phone);
     }
 
 
@@ -297,10 +334,10 @@ public class EditUserLogic {
         System.out.println("NewStatus= " + page.statusProfile.getText());
 
         if (Status.equals("Активный")) {
-            Assert.assertTrue("Статус не изменился", page.statusProfile.getText().equals("Отключен"));
+            assertEquals("Статус не изменился", "Отключен", page.statusProfile.getText());
             System.out.println("Статус изменился");
         } else {
-            Assert.assertTrue("Статус не изменился", page.statusProfile.getText().equals("Активный"));
+            assertEquals("Статус не изменился", "Активный", page.statusProfile.getText());
             System.out.println("Статус изменился");
         }
     }
@@ -321,7 +358,7 @@ public class EditUserLogic {
         page.sleep(1000);
         System.out.println("NewStatus= " + page.statusProfile.getText());
 
-        Assert.assertTrue("Статус изменился", page.statusProfile.getText().equals(Status));
+        assertEquals("Статус изменился", page.statusProfile.getText(), Status);
         System.out.println("Статус Не изменился");
 
     }
@@ -366,7 +403,7 @@ public class EditUserLogic {
         page.sleep(500);
 
         System.out.println(page.educationProfile.getText() + " = " + NewEducation);
-        Assert.assertTrue(page.educationProfile.getText().equals(NewEducation));
+        assertEquals(page.educationProfile.getText(), NewEducation);
     }
 
     public void editWorkerEducationCancel(String SecondName, String NewEducation) {
@@ -382,7 +419,7 @@ public class EditUserLogic {
         page.sleep(500);
 
         System.out.println(page.educationProfile.getText() + " = " + Education);
-        Assert.assertTrue(page.educationProfile.getText().equals(Education));
+        assertEquals(page.educationProfile.getText(), Education);
     }
 
     public void editWorkerCommunicationMethodsProfile(String SecondName, String NewEmailContact,
@@ -430,31 +467,32 @@ public class EditUserLogic {
         page.sleep(500);
 
         System.out.println(page.emailContactProfile.getText() + " = " + NewEmailContact);
-        Assert.assertTrue(page.emailContactProfile.getText().equals(NewEmailContact));
+        assertEquals(page.emailContactProfile.getText(), NewEmailContact);
 
         System.out.println(page.phoneContactProfile.getText() + " = " + "+7 (" + NewPhoneContact.charAt(0) + NewPhoneContact.charAt(1) + NewPhoneContact.charAt(2) + ") " + NewPhoneContact.charAt(3) + NewPhoneContact.charAt(4) + NewPhoneContact.charAt(5) + "-" + NewPhoneContact.charAt(6) + NewPhoneContact.charAt(7) + "-" + NewPhoneContact.charAt(8) + NewPhoneContact.charAt(9));
-        Assert.assertTrue(page.phoneContactProfile.getText().equals("+7 (" + NewPhoneContact.charAt(0) + NewPhoneContact.charAt(1) + NewPhoneContact.charAt(2) + ") " + NewPhoneContact.charAt(3) + NewPhoneContact.charAt(4) + NewPhoneContact.charAt(5) + "-" + NewPhoneContact.charAt(6) + NewPhoneContact.charAt(7) + "-" + NewPhoneContact.charAt(8) + NewPhoneContact.charAt(9)));
+        assertEquals(page.phoneContactProfile.getText(),
+                "+7 (" + NewPhoneContact.charAt(0) + NewPhoneContact.charAt(1) + NewPhoneContact.charAt(2) + ") " + NewPhoneContact.charAt(3) + NewPhoneContact.charAt(4) + NewPhoneContact.charAt(5) + "-" + NewPhoneContact.charAt(6) + NewPhoneContact.charAt(7) + "-" + NewPhoneContact.charAt(8) + NewPhoneContact.charAt(9));
 
 //        System.out.println(page.phoneContactProfile.getText() + " = " + NewPhoneContact);
 //        Assert.assertTrue(page.phoneContactProfile.getText().equals(NewPhoneContact));
 
         System.out.println(page.instagramContactProfile.getText() + " = " + NewInstagram);
-        Assert.assertTrue(page.instagramContactProfile.getText().equals(NewInstagram));
+        assertEquals(page.instagramContactProfile.getText(), NewInstagram);
 
         System.out.println(page.vkContactProfile.getText() + " = " + NewVk);
-        Assert.assertTrue(page.vkContactProfile.getText().equals(NewVk));
+        assertEquals(page.vkContactProfile.getText(), NewVk);
 
         System.out.println(page.whatsappContactProfile.getText() + " = " + NewWhatsapp);
-        Assert.assertTrue(page.whatsappContactProfile.getText().equals(NewWhatsapp));
+        assertEquals(page.whatsappContactProfile.getText(), NewWhatsapp);
 
         System.out.println(page.viberContactProfile.getText() + " = " + NewViber);
-        Assert.assertTrue(page.viberContactProfile.getText().equals(NewViber));
+        assertEquals(page.viberContactProfile.getText(), NewViber);
 
         System.out.println(page.facebookContactProfile.getText() + " = " + NewFacebook);
-        Assert.assertTrue(page.facebookContactProfile.getText().equals(NewFacebook));
+        assertEquals(page.facebookContactProfile.getText(), NewFacebook);
 
         System.out.println(page.otherContactProfile.getText() + " = " + NewOther);
-        Assert.assertTrue(page.otherContactProfile.getText().equals(NewOther));
+        assertEquals(page.otherContactProfile.getText(), NewOther);
     }
 
     public void editWorkerCommunicationMethodsProfileCancel(String SecondName, String NewEmailContact,
@@ -501,57 +539,110 @@ public class EditUserLogic {
         page.sleep(500);
 
         System.out.println(page.emailContactProfile.getText() + " = " + EmailContact);
-        Assert.assertTrue(page.emailContactProfile.getText().equals(EmailContact));
+        assertEquals(page.emailContactProfile.getText(), EmailContact);
 
         System.out.println(page.phoneContactProfile.getText() + " = " + PhoneContact);
-        Assert.assertTrue(page.phoneContactProfile.getText().equals(PhoneContact));
+        assertEquals(page.phoneContactProfile.getText(), PhoneContact);
 
         System.out.println(page.instagramContactProfile.getText() + " = " + InstagramContact);
-        Assert.assertTrue(page.instagramContactProfile.getText().equals(InstagramContact));
+        assertEquals(page.instagramContactProfile.getText(), InstagramContact);
 
         System.out.println(page.vkContactProfile.getText() + " = " + VkContact);
-        Assert.assertTrue(page.vkContactProfile.getText().equals(VkContact));
+        assertEquals(page.vkContactProfile.getText(), VkContact);
 
         System.out.println(page.whatsappContactProfile.getText() + " = " + WhatsappContact);
-        Assert.assertTrue(page.whatsappContactProfile.getText().equals(WhatsappContact));
+        assertEquals(page.whatsappContactProfile.getText(), WhatsappContact);
 
         System.out.println(page.viberContactProfile.getText() + " = " + ViberContact);
-        Assert.assertTrue(page.viberContactProfile.getText().equals(ViberContact));
+        assertEquals(page.viberContactProfile.getText(), ViberContact);
 
         System.out.println(page.facebookContactProfile.getText() + " = " + FacebookContact);
-        Assert.assertTrue(page.facebookContactProfile.getText().equals(FacebookContact));
+        assertEquals(page.facebookContactProfile.getText(), FacebookContact);
 
         System.out.println(page.otherContactProfile.getText() + " = " + OtherContact);
-        Assert.assertTrue(page.otherContactProfile.getText().equals(OtherContact));
+        assertEquals(page.otherContactProfile.getText(), OtherContact);
     }
 
-    public void editWorkerWorkplaces(String SecondName, String NewPost, String NewDepart) {
+    public void editWorkerWorkplaces(String SecondName, String NewPost, String NewDepart, String Post) {
         page.moveToProfileUserChange(SecondName);
         page.waitE_ClickableAndClick(page.specialistWorkpaleces);
-        page.waitE_ClickableAndClick(page.linkEditWorkplaces);
+        page.waitE_ClickableAndClick(page.linkAddWorkplaces);
         page.waitE_ClickableAndClick(page.structureOrganizations);
         page.waitE_ClickableAndClick(page.bulletHeadOrganization);
-        page.waitE_ClickableAndSendKeys(page.inputPosition, NewPost);
-        page.waitE_ClickableAndClick(page.inputRoleEmployee);
-        page.waitE_ClickableAndClick(page.roleEmployeeSpecialist);
-        page.waitE_ClickableAndClick(page.buttonSaveWorkplace);
+
+        page.sleep(500);
+        page.waitE_ClickableAndClick(page.inputWorkerPosition.get(0));
+        page.sleep(1000);
+        WebElement SelectedPosition = driver.findElement(By.xpath("//li[@class=\"el-select-dropdown__item\"]/span" +
+                "[contains(text(),\"" + NewPost + "\")]"));
+        page.waitE_ClickableAndClick(SelectedPosition);
+        page.waitE_ClickableAndClick(page.userinfoname);
+        page.sleep(1000);
+        page.waitE_ClickableAndClick(page.selectWorkerRole);
+        page.waitE_ClickableAndClick(page.selectWorkerRoleSpecialist);
+        page.waitE_ClickableAndClick(page.userinfoname);
+        page.waitE_ClickableAndClick(page.buttonAddWorkplace);
+        page.waitE_ClickableAndClick(page.linkChangeSpeciality);
+        page.waitE_ClickableAndClick(page.selectWorkerSpecialty);
+        page.waitE_ClickableAndClick(page.selectWorkerSpecialtyMed);
+        page.waitE_ClickableAndClick(page.userinfoname);
+        page.sleep(1000);
+
+        for (WebElement Speciality : page.selectedWorkerSpecialty) {
+            SelectedSpecialtys.add(Speciality.getText().replace(",", ""));
+        }
+
+        page.waitE_ClickableAndClick(page.linkSaveSpeciality);
         page.waitE_visibilityOf(page.workplace);
 
         System.out.println(page.workplace.getText() + " = " + NewDepart);
-        Assert.assertTrue(page.workplace.getText().equals(NewDepart));
+        assertEquals(page.workplace.getText(), NewDepart);
 
         System.out.println(page.post.getText() + " = " + NewPost);
-        Assert.assertTrue(page.post.getText().equals(NewPost));
+        assertEquals(page.post.getText(), NewPost);
 
-        System.out.println(page.role.getText() + " = " + "Хирург");
-        Assert.assertTrue(page.role.getText().equals("Хирург"));
+        System.out.println(page.role.getText() + " = " + "Специалист");
+        assertEquals("Специалист", page.role.getText());
 
-        page.waitE_ClickableAndClick(page.linkEditSpecialty);
-        page.waitE_ClickableAndClick(page.listSpecialty);
-        page.waitE_ClickableAndClick(page.specialtySurgeon);
-        page.waitE_ClickableAndClick(page.buttonSaveSpecialty);
+        for (WebElement Speciality : page.savedWorkerSpecialty) {
+            if (!Speciality.getText().equals(",")) {
+                SavedSpecialtys.add(Speciality.getText().replace(",", ""));
+            }
+        }
 
+        int i = -1;
+        for (String Spec : SelectedSpecialtys) {
+            i = i + 1;
+            for (int x = 0; x < SavedSpecialtys.size(); x++) {
+                u = 0;
+                System.out.println("Специальность №" + x);
+                System.out.println("Сравниваем специальности: " + SelectedSpecialtys.get(x) + " = " +
+                        Spec);
+                if (SelectedSpecialtys.get(x).equals(Spec)) {
+                    u = u + 1;
+                    System.out.println("!+Speciality finded+!");
+                    break;
+                } else {System.out.println("Специальности не совпали");}
+            }
+            Assert.assertEquals("Специальности различаются", 1, u);
+        }
 
+    }
+
+    public void editWorkerServices(String Login, String Password, String Email, String Phone, String Status,
+                                   String SecondName, String FirstName, String MiddleName, String Superuser,
+                                   String Depart, String Ref, String Post, String Role, String Specialities,
+                                   String Label, String ID, String LabelChild, String Cost, String IDchild,
+                                   String Regalia, String EmailCont, String PhoneCont, String Instagram, String Vk,
+                                   String Whatsapp, String Viber, String Facebook, String Other,
+                                   String CheckedAndFocus, String Checkeds, String Indeterminate, String Empty) {
+        page.moveToProfileUserChange(SecondName);
+        page.waitE_ClickableAndClick(page.specialistServices);
+        page.waitE_ClickableAndClick(page.buttonChangeServices);
+        page.editServices(Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName, Superuser,
+                Depart, Ref, Post, Role, Specialities, Label, ID, LabelChild, Cost, IDchild, Regalia, EmailCont,
+                PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other, CheckedAndFocus, Checkeds, Indeterminate,
+                Empty);
     }
 }
 
