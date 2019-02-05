@@ -1,6 +1,5 @@
-package time;
+package Time;
 
-import global.GlobalPage;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import junitparams.JUnitParamsRunner;
@@ -11,22 +10,20 @@ import utils.ConfigProperties;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 @RunWith(JUnitParamsRunner.class)
 public class TimeLogic {
 
-    String Token = "";
-    String UserID = "";
-
-    @Before
-    public void login() {
+    public String loginAPI(String Login, String Password) {
+        String Token = null;
         Map<String, Object> jsonAsMap = new HashMap<>();
-        jsonAsMap.put("auth", GlobalPage.LoginAUT);
-        jsonAsMap.put("password", GlobalPage.PasswordAUT);
+        jsonAsMap.put("auth", Login);
+        jsonAsMap.put("password", Password);
 
         Response response =
-                given().
+                given().log().all().
                         contentType(ContentType.JSON).
                         body(jsonAsMap).
                         baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("/passport/sess/login").
@@ -34,12 +31,19 @@ public class TimeLogic {
                         then().extract().response();
 
         Token = response.path("sid_hash");
-        System.out.println(Token);
+        System.out.println("Получили токен: " + Token);
+        return Token;
     }
 
-    public void createUserAPI(String Login, String Email, String Phone, String Password, String Status, String SecondName, String FirstName, String MiddleName, String Superuser) {
+    public String createUserAPI(String Token, String Login, String Password, String Email, String Phone, String Status,
+                                String SecondName, String FirstName, String MiddleName, String Superuser,
+                                String SendEmail, String OrgID, String OrgStatus, String Post1, String Post2,
+                                String Role1, String Role2) {
 
         Map<String, Object> jsonAsMapPassport = new HashMap<>();
+        String[] PostsList = {Post1};
+        String[] RolesList = {Role1, Role2};
+
         jsonAsMapPassport.put("login", Login);
         jsonAsMapPassport.put("email", Email);
         jsonAsMapPassport.put("phone", Phone);
@@ -48,10 +52,17 @@ public class TimeLogic {
         jsonAsMapPassport.put("first_name", FirstName);
         jsonAsMapPassport.put("middle_name", MiddleName);
         jsonAsMapPassport.put("last_name", SecondName);
-        jsonAsMapPassport.put("superuser", Superuser);
+        jsonAsMapPassport.put("superuser", ("true".equals(Superuser)));
+        jsonAsMapPassport.put("send_to_email", ("true".equals(SendEmail)));
+        jsonAsMapPassport.put("org_id", OrgID);
+        jsonAsMapPassport.put("org_posts", PostsList);
+        jsonAsMapPassport.put("org_roles", RolesList);
+        jsonAsMapPassport.put("org_status", OrgStatus);
+
+        System.out.println(jsonAsMapPassport);
 
         Response response =
-                given().
+                given().log().all().
                         header("Authorization", "Bearer " + Token).
                         contentType(ContentType.JSON).
                         body(jsonAsMapPassport).
@@ -59,35 +70,34 @@ public class TimeLogic {
                         when().post().
                         then().extract().response();
 
-        UserID = response.path("user_id");
-        System.out.println("Ответ: " + response.getBody().asString());
-        System.out.println("UserID= " + UserID);
+        String UserID = response.path("user_id");
+        System.out.println("Ответ при создании пользователя: " + response.getBody().asString());
+        System.out.println("Создали пользователя с ID: " + UserID);
+        return UserID;
     }
 
 
-    public void profileUserAPI(String Depart, String Post, String Role, String Specialities, String Label, String ID, String LabelChild, String Cost, String IDchild, String Regalia, String EmailCont, String PhoneCont, String Instagram, String Vk, String Whatsapp, String Viber, String Facebook, String Other) {
+    public void profileUserAPI(String Token, String UserID, String Spec1, String Spec2, String Service1, String Service2, String Regalia,
+                               String EmailCont, String PhoneCont, String Instagram, String Vk, String Whatsapp,
+                               String Viber, String Facebook, String Other) {
         Map<String, Object> jsonAsMapProfile = new HashMap<>();
-        Map<String, Object> jsonAsMapProfileworkplaces = new HashMap<>();
-        Map<String, Object> jsonAsMapProfileservices = new HashMap<>();
-        Map<String, Object> jsonAsMapProfilechildren = new HashMap<>();
+        Map<String, Object> jsonAsMapProfileService1 = new HashMap<>();
+        Map<String, Object> jsonAsMapProfileSpeciality1 = new HashMap<>();
+        Map<String, Object> jsonAsMapProfileSpeciality2 = new HashMap<>();
         Map<String, Object> jsonAsMapProfileContact = new HashMap<>();
-        String SpecList[] = {Specialities};
+        Map ServicesList[] = {jsonAsMapProfileService1};
+        Map SpecialitysList[] = {jsonAsMapProfileSpeciality1, jsonAsMapProfileSpeciality2};
 
         jsonAsMapProfile.put("user_id", UserID);
-        jsonAsMapProfile.put("workplaces", jsonAsMapProfileworkplaces);
-        jsonAsMapProfileworkplaces.put("depart", Depart);
-        jsonAsMapProfileworkplaces.put("post", Post);
-        jsonAsMapProfileworkplaces.put("role", Role);
-        jsonAsMapProfile.put("specialities", SpecList);
-        jsonAsMapProfile.put("services", jsonAsMapProfileservices);
-        jsonAsMapProfileservices.put("label", Label);
-        jsonAsMapProfileservices.put("id", ID);
-        jsonAsMapProfileservices.put("children", jsonAsMapProfilechildren);
-        jsonAsMapProfilechildren.put("label", LabelChild);
-        jsonAsMapProfilechildren.put("cost", Cost);
-        jsonAsMapProfilechildren.put("id", IDchild);
+        jsonAsMapProfile.put("services", ServicesList);
+        jsonAsMapProfile.put("specialities", SpecialitysList);
         jsonAsMapProfile.put("regalia", Regalia);
         jsonAsMapProfile.put("contacts", jsonAsMapProfileContact);
+
+        jsonAsMapProfileService1.put("id", Service1);
+        jsonAsMapProfileSpeciality1.put("id", Spec1);
+        jsonAsMapProfileSpeciality2.put("id", Spec2);
+
         jsonAsMapProfileContact.put("email", EmailCont);
         jsonAsMapProfileContact.put("phone", PhoneCont);
         jsonAsMapProfileContact.put("instagram", Instagram);
@@ -97,10 +107,9 @@ public class TimeLogic {
         jsonAsMapProfileContact.put("facebook", Facebook);
         jsonAsMapProfileContact.put("another", Other);
 
-
         System.out.println(jsonAsMapProfile);
         Response response =
-                given().
+                given().log().all().
                         header("Authorization", "Bearer " + Token).
                         contentType(ContentType.JSON).
                         body(jsonAsMapProfile).
@@ -108,17 +117,16 @@ public class TimeLogic {
                         when().post().
                         then().extract().response();
 
-
         System.out.println("Ответ: " + response.getBody().asString());
     }
 
-    public void uploadPhotoUserAPI(String Photo) {
+    public void uploadPhotoUserAPI(String Token, String UserID, String Photo) {
         Response response =
                 given().
                         header("Authorization", "Bearer " + Token).
                         contentType("multipart/form-data").
                         accept("application/json").
-                        multiPart(new File(ConfigProperties.getTestProperty("Files") + Photo)).
+                        multiPart(new File(ConfigProperties.getTestProperty("FilesAPI") + Photo)).
                         multiPart("user_id", UserID).
                         baseUri(ConfigProperties.getTestProperty("baseurl")).basePath("/profile/admin/user/userpic/").
                         when().post().

@@ -1,6 +1,5 @@
 package Integration;
 
-import Global.EnvironmentIntegration;
 import Global.GlobalPage;
 import junitparams.Parameters;
 import org.junit.Test;
@@ -81,11 +80,11 @@ public class IntegrationTest extends IntegrationLogic {
                 Superuser, SendEmail, Depart, Post, Role);
         integrationAPI.profileUserAPInew(Token, UserID, ServiceID, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-        compareServiceUserOne(SecondName, NameService, VendorService, DmsCost, OmsCost, PmuCost, OtherCosts);
+        compareServiceUserOne(UserID, SecondName, NameService, VendorService, DmsCost, OmsCost, PmuCost, OtherCosts);
 
         integrationAPI.editServicesSectionAPI(Token, ServicesSectionID, NewCodeSection, NewNameSectionme, NewPrintNameSection,
                 NewVendorSection);
-        compareServiceUserOne(SecondName, NameService, VendorService, DmsCost, OmsCost, PmuCost, OtherCosts);
+        compareServiceUserOne(UserID, SecondName, NameService, VendorService, DmsCost, OmsCost, PmuCost, OtherCosts);
 
         integrationAPI.editServiceAPI(Token, ServiceID, NewCodeService, NewNameService, NewPrintNameService,
                 NewVendorService, NewContraindicationsService, NewCreatorService, NewDescriptionService,
@@ -132,7 +131,7 @@ public class IntegrationTest extends IntegrationLogic {
         integrationAPI.profileUserAPInew(Token, UserID, Service, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
         integrationAPI.editUserSpecialtyAPI(Token, UserID, Spec1, Spec2, SpecialtyID3, SpecialtyID4);
-        compareSpecialtyUserOne(SecondName, FirstName, MiddleName);
+        compareSpecialtyUserOne(UserID, SecondName, FirstName, MiddleName);
 
         integrationAPI.editSpecialtyAPI(Token, Spec1, NewNameSpecialty, NewDescription);
         integrationAPI.editParentSpecialtyAPI(Token, Spec2, NewIcon, NewParent);
@@ -189,12 +188,11 @@ public class IntegrationTest extends IntegrationLogic {
                 InstagramOrg, VkOrg, OtherNameOrg, OtherValueOrg, NamePhone1Org, NumberPhone1Org, NamePhone2Org,
                 NumberPhone2Org, CodeOrg, Oms_number, Pump, Oms_id, StatusOrg, Service1, Service2, Service3);
 
-        integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName,
-                FirstName, MiddleName,
-                Superuser, SendEmail, Depart, Post, Role);
+        integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+                Superuser, SendEmail, OrgID, Post, Role);
         integrationAPI.profileUserAPInew(Token, UserID, ServiceID, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
-        compareOrganizationUserOne(SecondName, NameOrg);
+        compareOrganizationUserOne(UserID, SecondName, NameOrg);
 
         integrationAPI.editNameOrganizationAPI(Token, OrgID, NewNameOrg);
         compareOrganizationUserTwo(NewNameOrg);
@@ -311,13 +309,13 @@ public class IntegrationTest extends IntegrationLogic {
                                 String NewSecondName1, String NewFirstName1, String NewMiddleName1, String NewPost1) {
         Token = integrationAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA);
 
-        ServiceID1 = integrationAPI.createService1OrgAPI(Token, CodeService1, NameService1, PrintNameService1, Parent1,
+        ServiceID1 = integrationAPI.createServiceOrgAPI(Token, CodeService1, NameService1, PrintNameService1, Parent1,
                 VendorService1, ContraindicationsService1, CreatorService1, DescriptionService1, PreconditionService1,
                 TypeService1, DmsCost1, OmsCost1, PmuCost1, OtherCosts1, Favorit1, Record1);
-        ServiceID2 = integrationAPI.createService1OrgAPI(Token, CodeService2, NameService2, PrintNameService2, Parent2,
+        ServiceID2 = integrationAPI.createServiceOrgAPI(Token, CodeService2, NameService2, PrintNameService2, Parent2,
                 VendorService2, ContraindicationsService2, CreatorService2, DescriptionService2, PreconditionService2,
                 TypeService2, DmsCost2, OmsCost2, PmuCost2, OtherCosts2, Favorit2, Record2);
-        ServiceID3 = integrationAPI.createService1OrgAPI(Token, CodeService3, NameService3, PrintNameService3, Parent3,
+        ServiceID3 = integrationAPI.createServiceOrgAPI(Token, CodeService3, NameService3, PrintNameService3, Parent3,
                 VendorService3, ContraindicationsService3, CreatorService3, DescriptionService3, PreconditionService3,
                 TypeService3, DmsCost3, OmsCost3, PmuCost3, OtherCosts3, Favorit3, Record3);
 
@@ -325,7 +323,7 @@ public class IntegrationTest extends IntegrationLogic {
         integrationAPI.profileOrganizationOrgAPI(Token, OrgID, NameOrg, AbbrOrg, ChiefOrg, Help_conditionsOrg,
                 Org_profileOrg, DescriptionOrg, AddressOrg, GeodataX, GeodataY, SiteOrg, EmailOrg, FacebookOrg,
                 InstagramOrg, VkOrg, OtherNameOrg, OtherValueOrg, NamePhone1Org, NumberPhone1Org, NamePhone2Org,
-                NumberPhone2Org, CodeOrg, Oms_number, Pump, Oms_id, StatusOrg, Service1, Service2, Service3);
+                NumberPhone2Org, CodeOrg, Oms_number, Pump, Oms_id, StatusOrg, ServiceID1, ServiceID2, ServiceID3);
         compareServiceOrgOne(OrgID, NameOrg, NameService1, VendorService1, DmsCost1, OmsCost1, PmuCost1, NameService2,
                 VendorService2, DmsCost2, OmsCost2, PmuCost2, NameService3, VendorService3, DmsCost3, OmsCost3,
                 PmuCost3);
@@ -340,8 +338,7 @@ public class IntegrationTest extends IntegrationLogic {
                 EmailCont2, PhoneCont2, Instagram2, Vk2, Whatsapp2, Viber2, Facebook2, Other2);
         UserID3 = integrationAPI.createUserOrgAPI(Token, OrgID, Login3, Password3, Email3, Phone3, Status3, SecondName3, FirstName3,
                 MiddleName3, Superuser3, SendEmail3, Depart3, Post3, Role3);
-        integrationAPI.profileUserOrg3APInew(Token, UserID3, ServiceID, ServiceID2, ServiceID3, Depart3, Ref3, Post3, Status3, Role3, Spec13, Spec23, Regalia3,
-                EmailCont3, PhoneCont3, Instagram3, Vk3, Whatsapp3, Viber3, Facebook3, Other3);
+        integrationAPI.profileUserOrg3APInew(Token, UserID3, ServiceID1, ServiceID2, ServiceID3, Depart3, Ref3, Post3, Status3, Role3, Spec13, Spec23, Regalia3,                EmailCont3, PhoneCont3, Instagram3, Vk3, Whatsapp3, Viber3, Facebook3, Other3);
         compareServiceOrgTwo(NameOrg, NameService1, VendorService1, DmsCost1, OmsCost1, PmuCost1, NameService2,
                 VendorService2, DmsCost2, OmsCost2, PmuCost2, NameService3, VendorService3, DmsCost3, OmsCost3,
                 PmuCost3, SecondName1, FirstName1, MiddleName1, Post1, SecondName2, FirstName2, MiddleName2, Post2, SecondName3,
@@ -533,7 +530,7 @@ public class IntegrationTest extends IntegrationLogic {
                                              String NewStatus) {
 
         Token = integrationAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA);
-        UserID=integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        UserID = integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser, SendEmail, Depart, Post, Role);
         integrationAPI.profileUserAPInew(Token, UserID, ServiceID, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
@@ -559,7 +556,7 @@ public class IntegrationTest extends IntegrationLogic {
                                           String PhoneCont, String Instagram, String Vk, String Whatsapp,
                                           String Viber, String Facebook, String Other) {
         Token = integrationAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA);
-        UserID=integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        UserID = integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser, SendEmail, Depart, Post, Role);
         integrationAPI.profileUserAPInew(Token, UserID, ServiceID, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
@@ -588,7 +585,7 @@ public class IntegrationTest extends IntegrationLogic {
                                          String Viber, String Facebook, String Other) {
 
         Token = integrationAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA);
-        UserID=integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+        UserID = integrationAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
                 Superuser, SendEmail, Depart, Post, Role);
         integrationAPI.profileUserAPInew(Token, UserID, ServiceID, Depart, Ref, Post, Status, Role, Spec1, Spec2, Regalia, EmailCont,
                 PhoneCont, Instagram, Vk, Whatsapp, Viber, Facebook, Other);
@@ -623,7 +620,7 @@ public class IntegrationTest extends IntegrationLogic {
 
                                   String NewNameOrg, String NewNParentOrg) {
         Token = integrationAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA);
-        OrgID=integrationAPI.createOrganizationAPI(Token, ParentOrg);
+        OrgID = integrationAPI.createOrganizationAPI(Token, ParentOrg);
         integrationAPI.profileOrganizationAPI(Token, OrgID, NameOrg, AbbrOrg, ChiefOrg, Help_conditionsOrg,
                 Org_profileOrg, DescriptionOrg, AddressOrg, GeodataX, GeodataY, SiteOrg, EmailOrg, FacebookOrg,
                 InstagramOrg, VkOrg, OtherNameOrg, OtherValueOrg, NamePhone1Org, NumberPhone1Org, NamePhone2Org,

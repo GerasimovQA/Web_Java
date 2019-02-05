@@ -51,7 +51,7 @@ public class EditPasswordPage extends GlobalPage {
     @FindBy(xpath = "//span[text()=\"Войти в почту\"]/..")
     public WebElement enterToPostYandex;
 
-    @FindBy(name = "loginAPI")
+    @FindBy(name = "login")
     public WebElement loginFormYandex;
 
     @FindBy(name = "passwd")
@@ -115,7 +115,7 @@ public class EditPasswordPage extends GlobalPage {
     public WebElement iconDeleteAllLettersGoogleMail;
 
     // Проверка письма в Mail
-    @FindBy(name = "loginAPI")
+    @FindBy(name = "login")
     public WebElement loginFormMailRu;
 
     @FindBy(name = "password")

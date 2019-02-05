@@ -1,21 +1,30 @@
-package system;
+package System;
 
-import global.EnvironmentSystem;
+import Global.GlobalPage;
 import junitparams.Parameters;
 import org.junit.Test;
 
 public class SystemTest extends SystemLogic {
+    private SystemAPI systemAPI = new SystemAPI();
+
+    private String Token = null;
+    private String UserID = null;
+
     @Test   //99.1
     @Parameters(value = {
-            "Sh12aa887ouoiрорy61| 7simbol | 45al191hhg1@mail.ru | +79063028361 | active| Ананасов |" +
-                    " Эрдоган | Ануфриевич | true",
+            "Shaa887ouoiy61| 6simbo | 45al1911@m121ail.ru | +79863028361 | active| Астралов | Антуан | Экзюпери | true |" +
+                    " false | 5b7d08aa068d7552d904d8be | ФГАОУ ВО Первый МГМУ им. И.М. Сеченова Минздрава России " +
+                    "(Сеченовский Университет) | active | Врач | | doctor |",
     })
     public void logoutSessionTest(String Login, String Password, String Email, String Phone, String Status,
-                                  String SecondName, String FirstName, String MiddleName, String Superuser) {
-        EnvironmentSystem.login();
-        EnvironmentSystem.logoutAllUserSessionsAPI();
-        EnvironmentSystem.createUserAPI(Login, Email, Phone, Password, Status, SecondName, FirstName, MiddleName,
-                Superuser);
+                                  String SecondName, String FirstName, String MiddleName, String Superuser,
+                                  String SendEmail, String OrgID, String Depart, String OrgStatus, String Post1,
+                                  String Post2, String Role1, String Role2) {
+        Token = systemAPI.loginAPI(GlobalPage.LoginAUT_SA, GlobalPage.PasswordAUT_SA, "ok");
+        UserID = systemAPI.createUserAPI(Token, Login, Password, Email, Phone, Status, SecondName, FirstName, MiddleName,
+                Superuser, SendEmail, OrgID, OrgStatus, Post1, Post2, Role1, Role2);
+        loginFront(Login, Password);
+        systemAPI.logoutAllUserSessionsAPI(Token, UserID);
         logoutFront();
     }
 }

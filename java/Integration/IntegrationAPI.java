@@ -654,7 +654,7 @@ public class IntegrationAPI extends GlobalPage {
                         when().post().
                         then().extract().response();
 
-        System.out.println("Ответ: " + response.getBody().asString());
+        System.out.println("Ответ после редактироания специальностей юзера: " + response.getBody().asString());
         Assert.assertTrue(!response.getBody().asString().contains("error"));
     }
     // API для проверки Специальностей в профиле сотрудника <-
@@ -662,12 +662,12 @@ public class IntegrationAPI extends GlobalPage {
 //    -------------------------------------------------------------------------------------------------------------
 
     // API для проверки Услуг в профиле организации ->
-    public String createService1OrgAPI(String Token, String CodeService, String NameService,
-                                       String PrintNameService, String Parent, String VendorService,
-                                       String ContraindicationsService, String CreatorService,
-                                       String DescriptionService, String PreconditionService, String TypeService,
-                                       String DmsCost, String OmsCost, String PmuCost, String OtherCosts,
-                                       String Favorit, String Record) {
+    public String createServiceOrgAPI(String Token, String CodeService, String NameService,
+                                      String PrintNameService, String Parent, String VendorService,
+                                      String ContraindicationsService, String CreatorService,
+                                      String DescriptionService, String PreconditionService, String TypeService,
+                                      String DmsCost, String OmsCost, String PmuCost, String OtherCosts,
+                                      String Favorit, String Record) {
         Map<String, Object> jsonAsMapServices = new HashMap<>();
         Map<String, Object> jsonAsMapServicesCost = new HashMap<>();
         String[] Other = {OtherCosts};
@@ -701,7 +701,7 @@ public class IntegrationAPI extends GlobalPage {
                         then().extract().response();
 
         String ServiceID = response.path("_id");
-        System.out.println("Ответ при создании услуи 1 : " + response.getBody().asString());
+        System.out.println("Ответ при создании услуги : " + response.getBody().asString());
         System.out.println("Создали услугу с _id: " + ServiceID);
         Assert.assertTrue(!response.getBody().asString().contains("error"));
         return ServiceID;
@@ -879,7 +879,7 @@ public class IntegrationAPI extends GlobalPage {
                         when().post().
                         then().extract().response();
 
-        System.out.println("Ответ: " + response.getBody().asString());
+        System.out.println("Ответ после заполнения профиля организации: " + response.getBody().asString());
         Assert.assertTrue(!response.getBody().asString().contains("error"));
     }
 

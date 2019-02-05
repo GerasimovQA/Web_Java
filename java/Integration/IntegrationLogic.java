@@ -85,10 +85,10 @@ public class IntegrationLogic {
     public static void afterClass() {
     }
 
-    public void compareServiceUserOne(String SecondName, String NameService, String VendorService, String DmsCost,
+    public void compareServiceUserOne(String UserID, String SecondName, String NameService, String VendorService, String DmsCost,
                                       String OmsCost, String PmuCost, String OtherCosts) {
-        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
-        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
+        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
+        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
         p.sleep(4000);
         driver.navigate().refresh();
         p.waitTextPresent(p.buttonChangeProfile, "Редактировать профиль");
@@ -121,9 +121,9 @@ public class IntegrationLogic {
         }
     }
 
-    public void compareSpecialtyUserOne(String SecondName, String FirstName, String MiddleName) {
-        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
-        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
+    public void compareSpecialtyUserOne(String UserID, String SecondName, String FirstName, String MiddleName) {
+        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
+        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
         p.preloader();
         p.waitTextPresent(p.buttonChangeProfile, "Редактировать профиль");
 //        p.waitVisibility(System.out.printlnofQR);
@@ -162,9 +162,9 @@ public class IntegrationLogic {
         p.compareWebelementsListAndArrayList(p.listProfSpeciality, ListSpecialtysInProfile, 3);
     }
 
-    public void compareOrganizationUserOne(String SecondName, String NameOrg) {
-        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
-        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + EnvironmentIntegration.UserID1);
+    public void compareOrganizationUserOne(String UserID, String SecondName, String NameOrg) {
+        driver.get(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
+        System.out.println(ConfigProperties.getTestProperty("baseurl") + "#/users/" + UserID);
         p.preloader();
         p.waitTextPresent(p.buttonChangeProfile, "Редактировать профиль");
 

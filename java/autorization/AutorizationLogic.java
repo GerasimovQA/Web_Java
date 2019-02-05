@@ -1,5 +1,7 @@
-package autorization;
+package Autorization;
 
+import Global.Capa;
+import Global.GlobalPage;
 import junitparams.JUnitParamsRunner;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -8,113 +10,75 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import utils.ConfigProperties;
-
-import java.util.logging.Level;
+import java.net.MalformedURLException;
+import java.net.URI;
 
 @RunWith(JUnitParamsRunner.class)
 public class AutorizationLogic {
 
-    public static WebDriver driver;
-    public static AutorizationPage page;
+    private static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
+    private RemoteWebDriver driver;
+    private AutorizationPage p;
 
     @Rule
-    public TestRule screenshotRule = new TestWatcher() {
+    public final TestRule screenshotRule = new TestWatcher() {
 
         @Override
         protected void starting(Description description) {
-
-//            System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-//            ChromeOptions options = new ChromeOptions();
-//            options.addArguments(ConfigProperties.getTestProperty("head"));
-//            options.addArguments("window-size=1200,800");
-//
-//            LoggingPreferences logPrefs = new LoggingPreferences();
-//            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-//            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-//
-//
-//            driver = new ChromeDriver(options);
-//            page = new AutorizationPage(driver);
+            System.out.println("\n\n\n");
+            try {
+                driver = Capa.getRemouteDriver(ConfigProperties.getTestProperty("sys"),
+                        URI.create(ConfigProperties.getTestProperty("endpoint")).toURL(), description);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            tlDriver.set(driver);
+            p = new AutorizationPage(driver);
+            driver.manage().window().setSize(Capa.getDimension());
             driver.get(ConfigProperties.getTestProperty("baseurl"));
-//            driver.manage().logs().get(LogType.BROWSER);
-
-        }
+                                }
 
         @Override
         protected void finished(Description description) {
-            driver.navigate().refresh();
-         //            driver.quit();
+            tlDriver.get().quit();
         }
 
         @Override
         protected void failed(Throwable e, Description description) {
-            captureScreenshot(description.getMethodName());
+            p.captureScreenshot(description.getMethodName(), GlobalPage.failedTestsAutorization);
         }
     };
 
-
-    @BeforeClass
-    public static void beforClass() {
-        System.setProperty("webdriver.chrome.driver", ConfigProperties.getTestProperty("chromedriver"));
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments(ConfigProperties.getTestProperty("head"));
-        options.addArguments("window-size=1200,800");
-
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-
-        driver = new ChromeDriver(options);
-        page = new AutorizationPage(driver);
-        driver.get(ConfigProperties.getTestProperty("baseurl"));
-        driver.manage().logs().get(LogType.BROWSER);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        driver.quit();
-    }
-
-    private void captureScreenshot(String Name) {
-        page.screenFailedTest(Name);
-    }
-
     public void sucsses(String login, String password, String phrase) {
-        page.auth(login, password);
-//        page.waitE_ClickableAndClick(page.authButtonEnter);
-        page.autorization(page.userinfoname, phrase);
-
-        String scriptToExecute = "var performance = window.performance || window.mozPerformance || window" +
-                ".msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; " +
-                "return network;";
-        String netData = ((JavascriptExecutor) driver).executeScript(scriptToExecute).toString();
-        System.out.println(netData);
-        page.waitE_ClickableAndClick(page.userinfoname);
-        page.waitE_ClickableAndClick(page.listActionProfileExit);
-
+        p.auth(login, password);
+        p.autorization(p.userinfoname, phrase);
     }
 
     public void emptyLoginPass(String login, String password, String phrase) {
-        page.auth(login, password);
-//        page.waitE_ClickableAndSendKeys(page.authInputLogin, login);
-//        page.waitE_ClickableAndSendKeys(page.authInputPassword, password);
-//        page.waitE_ClickableAndClick(page.authButtonEnter);
-        page.autorization(page.emptyloginpassword, phrase);
+        p.auth(login, password);
+        p.autorization(p.emptyloginpassword, phrase);
     }
 
     public void errorLoginPass(String login, String password, String phrase) {
-        page.auth(login, password);
-//        page.waitE_ClickableAndSendKeys(page.authInputLogin, login);
-//        page.waitE_ClickableAndSendKeys(page.authInputPassword, password);
-//        page.waitE_ClickableAndClick(page.authButtonEnter);
-        page.autorization(page.errorloginpassword, phrase);
+        System.out.println("Autorization begin");
+        p.clickAndSendKeys(p.authInputLogin, login);
+        System.out.println("Login: " + login);
+        p.clickAndSendKeys(p.authInputPassword, password);
+        System.out.println("Password: " + password);
+        p.click(p.authButtonEnter);
+        System.out.println("click Enter");
+        p.sleep(7000);
+        try {
+            p.click(p.userinfoname);
+        }catch (TimeoutException e){
+            System.out.println("Не удалось аторизоваться и это хорошо");
+            return;
+        }
+        throw new Error("Выполнена авторизация несуществующего юзера");
     }
 }
+

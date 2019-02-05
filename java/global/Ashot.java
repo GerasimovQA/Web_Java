@@ -1,4 +1,4 @@
-package global;
+package Global;
 
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.ashot.AShot;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Ashot extends GlobalPage {
 
-    public static void screenshot(WebDriver driver, String Namefile, int pix) {
+    public static void screenshot(WebDriver driver, String Namefile, int PixMin, int PixMax) {
 
         Screenshot shot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
         String nameFile = Namefile;
@@ -42,7 +42,7 @@ public class Ashot extends GlobalPage {
 
             System.out.println("Различие снимков в пикселях: " + diff.getDiffSize());
 
-            if (diff.getDiffSize() >= pix) {
+            if (diff.getDiffSize() >= PixMin && diff.getDiffSize() <= PixMax) {
                 File diffFile = new File(diffDir + nameFile + ".png");
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);
                 expectedFile.delete();
@@ -54,7 +54,7 @@ public class Ashot extends GlobalPage {
                 expectedFile.delete();
                 actualFile.delete();
 //                diffFile.delete();
-                throw new AssertionError("Слишком маленькая разница в пикселях");
+                throw new AssertionError("Слишком маленькая или слишклм большая разница в пикселях");
             }
         } catch (IOException e) {
             e.printStackTrace();

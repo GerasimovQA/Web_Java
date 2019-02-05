@@ -1,23 +1,23 @@
-package historychanges;
+package HistoryChanges;
 
-import global.GlobalPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import Global.GlobalPage;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigProperties;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import static io.restassured.RestAssured.given;
 
 public class HistoryChangesPage extends GlobalPage {
 
-    public HistoryChangesPage(WebDriver driver) {
+    public HistoryChangesPage(RemoteWebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
     }
@@ -26,10 +26,6 @@ public class HistoryChangesPage extends GlobalPage {
     //    ФИО юзера
     @FindBy(xpath = "//*[@id=\"pane-user\"]/div/div[2]/div[1]/div[1]/div[1]/div[3]")
     public WebElement fioUser;
-
-    //    Ссылка "История изменений"
-    @FindBy(xpath = "//span[text()= \"История изменений\"]")
-    public WebElement linkHistoryChanges;
 
     // Маркер загрузки списка - 10 строка в истории
     @FindBy(xpath = "//div/div[2]/div[3]/table/tbody/tr[10]/td[3]/div")
@@ -180,9 +176,7 @@ public class HistoryChangesPage extends GlobalPage {
     @FindBy(xpath = "//div[3]/p[text()=\"Ссылка скопирована в буфер обмена\"]")
     public WebElement popoverLinkIsCopy;
 
-
-
-}
+  }
 
 
 

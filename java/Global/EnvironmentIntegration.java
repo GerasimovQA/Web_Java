@@ -669,7 +669,7 @@ public class EnvironmentIntegration {
 ////    -------------------------------------------------------------------------------------------------------------
 //
 //    // API для проверки Услуг в профиле организации ->
-//    public static void createService1OrgAPI(String CodeService, String NameService,
+//    public static void createServiceOrgAPI(String CodeService, String NameService,
 //                                            String PrintNameService, String Parent, String VendorService,
 //                                            String ContraindicationsService, String CreatorService,
 //                                            String DescriptionService, String PreconditionService, String TypeService,
