@@ -1,0 +1,115 @@
+  Возвращает значение выбранного ключа и проверка всего ответа:
+  
+  public String generateSopsIdAPI(String Cookies, String DomainID, String SopsName) {
+        String Body = "";
+
+        Response response =
+                given().log().all().
+                        header("Cookie", Cookies).
+                        contentType(ContentType.JSON).
+                        body(Body).
+                        baseUri(BaseUrl).basePath("/manager/api/route/" +
+                        DomainID + "/" + SopsName).
+                        when().get().
+                        then().extract().response();
+
+        String SopsID = response.path("id");
+        System.out.println("Ответ при создании СОПСа: " + response.getBody().asString());
+        Assert.assertTrue(response.getBody().asString().contains(SopsName));
+        return SopsID;
+    }
+    
+    
+ 
+ 
+Пример кода с Селенидом:
+
+package ru.factorts.page;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+import org.junit.Assert;
+import java.util.ArrayList;
+import java.util.List;
+import static com.codeborne.selenide.Selenide.*;
+
+public class EdaPage extends BasePage {
+
+    ArrayList<String> ListName = new ArrayList<>();
+    ArrayList<String> ListPrice = new ArrayList<>();
+    ArrayList<String> ListConditions = new ArrayList<>();
+
+    BasePage basePage = new BasePage();
+
+    public SelenideElement lastPage = $x("(//div[@class=\"b-pagination__pages\"]//div[@class=\"b-button__content\"])[last()]"),
+            buttonByPrice = $x("//div[contains(text(),'цене')]"),
+            buttonForward = $x("//div[text()=\"Вперед →\"]");
+
+    ElementsCollection name = $$x("//div[@class=\"b-offer__description\"]");
+    ElementsCollection item = $$x("//div[@class=\"b-offer__root\"]");
+
+    @Step("Ожидаем загрузки списка товаров")
+    public void waitLoadList(List<SelenideElement> listelement, int size) {
+        int Time = 0;
+        do {
+            sleep(500);
+            Time = Time + 500;
+            System.out.println("Sum elements: " + listelement.size() + ", Time: " + Time);
+            if (Time >= 60000) {
+                throw new AssertionError("List not loaded");
+            }
+        } while (size != listelement.size());
+    }
+
+    public void parsingItems(String Shop, String City) {
+        String URL = "https://edadeal.ru/" + City + "/retailers/" + Shop + "?page=1";
+        open(URL);
+        basePage.click(buttonByPrice);
+
+        int LastPage = Integer.parseInt(lastPage.getText());
+        System.out.println("Всего страниц: " + LastPage);
+
+        for (int x = 1; x <= LastPage; x++) {
+            sleep(2000);
+            if (x != LastPage) {
+                waitLoadList(name, 30);
+            } else {
+                sleep(5000);
+            }
+            int SumItemsPage = item.size();
+
+            for (int i = 1; i <= SumItemsPage; i++) {
+                int number = (x * 30) - 30;
+
+                String Name = $x("(//div[@class=\"b-offer__root\"])[" + i + "]//div[@class=\"b-offer__product-info\"]").getText().replace("'", "");
+                String Price = $x("(//div[@class=\"b-offer__root\"])[" + i + "]//div[@class=\"b-offer__price-new\"]").getText().replace(" ", "");
+                String Conditions = $x("(//div[@class=\"b-offer__root\"])[" + i + "]//div[@class=\"b-offer__dates\"]").getText();
+
+                if (!Name.equals("") && !Price.equals("") && !Conditions.equals("Акция завершилась")) {
+                    ListName.add(Name);
+                    ListPrice.add(Price);
+                    ListConditions.add(Conditions);
+                } else {
+                    System.out.println("У товара нет названия, цены или акция завершилась");
+                    ListName.add("0");
+                    ListPrice.add("0");
+                    ListConditions.add("0");
+                }
+
+                System.out.println("Товар № " + (number + i) +
+                        ". Название: " + ListName.get(number + (i - 1)).replace("'", "") +
+                        ". Цена: " + ListPrice.get(number + (i - 1)).replace(" ", "") +
+                        ". Условия: " + ListConditions.get(number + (i - 1)).replace("'", ""));
+            }
+
+            System.out.println("\n");
+            if (x != LastPage) {
+                basePage.click(buttonForward);
+            }
+        }
+
+        Assert.assertEquals(ListName.size(), ListPrice.size());
+    }
+}
+
+
