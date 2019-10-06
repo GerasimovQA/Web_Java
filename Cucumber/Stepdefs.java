@@ -15,9 +15,9 @@ public class Stepdefs {
     Page p = new Page();
 
     @Given("^Url \"([^\"]*)\" and Request \"([^\"]*)\"$")
-    public void url_and_Sum(String arg1, String arg2) {
-        openedUrl = arg1;
-        reqest = arg2;
+    public void url_and_Sum(String url, String req) {
+        openedUrl = url;
+        reqest = req;
     }
 
     @When("^I go to Url and input Request$")
@@ -39,6 +39,5 @@ public class Stepdefs {
         if (compare.equals("smaller")) {
             Assert.assertTrue(intResult < Integer.parseInt(sum));
         }
-
     }
 }
