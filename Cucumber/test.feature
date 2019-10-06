@@ -1,5 +1,5 @@
 Feature: Test sum reqest.
-  My first Cucumber
+  My first Cucumber: 1 true and 1 false
 
   Scenario Outline: Correct or not correct sum in response
     Given Url "<url>" and Request "<request>"
