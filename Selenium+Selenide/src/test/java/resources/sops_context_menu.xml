@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans factor:name="CONTEXT_MENU_DOMAIN"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:factor="factor-schema"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://camel.apache.org/schema/spring            http://camel.apache.org/schema/spring/camel-spring.xsd        http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/jdbc       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd        http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context.xsd        http://camel.apache.org/schema/cxf               http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <camelContext errorHandlerRef="myDeadLetterErrorHandler"
+        id="b60bff74-75c9-4bbe-b937-8bf19f6c651b"
+        xmlns="http://camel.apache.org/schema/spring"
+        xmlns:S="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+        <route factor:name="rtt" id="rtt">
+            <from id="ef14ed85-c95f-4db8-81a1-2834a285cecd" uri="file://{{ACTIVEMQ_HOME}}/rtt?noop=true&amp;idempotentKey=${file:name}-${file:modified}">
+                <description/>
+            </from>
+            <transacted factor:component="TransactionEndpoint"
+                factor:guid="dd722016-5d94-4a51-8078-9cf4eca7a61f" id="a387469c-45c5-4030-9369-abce25053902"/>
+            <setHeader factor:component="SetHeaderEndpoint"
+                factor:guid="a83fb80d-7f64-4f91-a590-1524ecbdc869"
+                headerName="inFile" id="c5f479b5-5a4f-4a1c-85bf-e4b93dc55d2f">
+                <simple>${file:name}</simple>
+            </setHeader>
+            <bean factor:component="ProcessBeanEndpoint"
+                factor:guid="e4ff2abe-1ece-45e9-bfb3-2e39b1d46a74"
+                id="d23b3c10-a5bb-42e5-b15c-fc0dfea0f180"
+                method="setRoute" ref="routeBean"/>
+        </route>
+        <route factor:name="mt" id="mt">
+            <from id="f7205bc4-0af7-4549-9628-46ece9b0837a" uri="file://{{ACTIVEMQ_HOME}}/mt?noop=true&amp;idempotentKey=${file:name}-${file:modified}">
+                <description/>
+            </from>
+            <transacted factor:component="TransactionEndpoint"
+                factor:guid="ad0f4218-eec6-471c-94af-0edc651e1e84" id="da75ea9e-cb1a-42e6-9283-d8d39c3b3649"/>
+            <setHeader factor:component="SetHeaderEndpoint"
+                factor:guid="f500a5f4-0370-4ed8-a9ab-f11cc399b238"
+                headerName="inFile" id="f1eb8714-c5b3-4b21-b8fd-b5dba511056d">
+                <simple>${file:name}</simple>
+            </setHeader>
+            <bean factor:component="ProcessBeanEndpoint"
+                factor:guid="d1046668-dd8b-436d-9a82-0536d80d0172"
+                id="c022aacd-ac27-4be6-8f53-19dbc23f9e12"
+                method="setRoute" ref="routeBean"/>
+        </route>
+        <route factor:name="SOPS_CLONE" id="ffbb37fa-0d06-452c-bca2-f1c527f70606">
+            <from id="b9cf3d26-c3ef-4ab0-aede-341254fb504e" uri="localmq://TEST_QUEUE_IN_CLONE">
+                <description>Локальная очередь</description>
+            </from>
+            <to uri="localmq://TEST_QUEUE_OUT_CLONE">
+                <description>Локальная очередь</description>
+            </to>
+        </route>
+        <route factor:name="SOPS_EDIT" id="2a1cdb4a-c522-40c0-a9b0-7bf33c98dfce">
+            <from id="d9be6c62-f58e-45af-bae0-6cbd05bc2e81" uri="localmq://TEST_QUEUE_IN_EDIT">
+                <description>Локальная очередь</description>
+            </from>
+            <to uri="localmq://TEST_QUEUE_OUT_EDIT">
+                <description>Локальная очередь</description>
+            </to>
+        </route>
+        <route factor:name="SOPS_MOVE" id="0be99c19-16e2-4861-8b57-f9dfcf99e3ac">
+            <from id="cbae0111-dccc-48b9-b9fd-bfccfc9ae41d" uri="localmq://TEST_QUEUE_IN_MOVE">
+                <description>Локальная очередь</description>
+            </from>
+            <to uri="localmq://TEST_QUEUE_OUT_MOVE">
+                <description>Локальная очередь</description>
+            </to>
+        </route>
+    </camelContext>
+    <import resource="../domain-beans.xml"/>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQMaxConnections" name="localMQMaxConnections">
+        <constructor-arg value="10"/>
+    </bean>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQMaximumActiveSessionPerConnection" name="localMQMaximumActiveSessionPerConnection">
+        <constructor-arg value="1000"/>
+    </bean>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQConcurrentConsumers" name="localMQConcurrentConsumers">
+        <constructor-arg value="1"/>
+    </bean>
+</beans>

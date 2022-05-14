@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans factor:name="SENDMESSAGES" factor:status="true"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:S="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:factor="factor-schema"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://camel.apache.org/schema/spring            http://camel.apache.org/schema/spring/camel-spring.xsd        http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/jdbc       http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd        http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context.xsd        http://camel.apache.org/schema/cxf               http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <camelContext errorHandlerRef="myDeadLetterErrorHandler"
+        id="eac4383b-ebdb-4efb-9d10-99832854b0af" xmlns="http://camel.apache.org/schema/spring">
+        <route factor:name="sendMessages" id="8662e2bd-4922-4261-85c3-fd528b1f03a3">
+            <from id="3004af07-c1b3-4b32-8c18-d0fb41d2bbbf" uri="timer://1?delay=-1&amp;repeatCount=1000000">
+                <description>Таймер</description>
+            </from>
+            <setBody factor:component="SetBodyEndpoint"
+                factor:custom-name="Установить тело сообщения"
+                factor:guid="6488f3da-2894-4a7e-ab2c-c9eb6c162937" id="6488f3da-2894-4a7e-ab2c-c9eb6c162937">
+                <simple><![CDATA[test]]></simple>
+            </setBody>
+            <to id="1945809d-7bc9-4c2d-a583-1a8117070cc2" uri="localmq://OUT_SM">
+                <description>Локальная очередь</description>
+            </to>
+        </route>
+    </camelContext>
+    <import resource="../domain-beans.xml"/>
+    <bean
+        class="org.apache.camel.component.properties.PropertiesComponent"
+        factor:bean-type="DEFAULT" id="properties" name="properties">
+        <property name="cache" value="false"/>
+        <property name="location" value="file:./conf/sops/domains/properties/eac4383b-ebdb-4efb-9d10-99832854b0af.properties"/>
+    </bean>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQMaxConnections" name="localMQMaxConnections">
+        <constructor-arg value="10"/>
+    </bean>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQMaximumActiveSessionPerConnection" name="localMQMaximumActiveSessionPerConnection">
+        <constructor-arg value="1000"/>
+    </bean>
+    <bean class="java.lang.Integer" factor:bean-type="DEFAULT"
+        id="localMQConcurrentConsumers" name="localMQConcurrentConsumers">
+        <constructor-arg value="100"/>
+    </bean>
+</beans>
