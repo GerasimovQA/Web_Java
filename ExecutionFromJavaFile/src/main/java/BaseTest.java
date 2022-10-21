@@ -29,9 +29,9 @@ public class BaseTest {
     public static JsonNode sendSimpleMessage(String message) throws UnirestException {
         HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/" + "sandbox1b34395e88d149f0a24e6dcfa454f0e9.mailgun.org" +
                         "/messages")
-                .basicAuth("api", "d1c38f93936e47214fb49539bfb6d88d-835621cf-904349a3")
+                .basicAuth("api", "YOUR_API_CODE")
                 .queryString("from", "appoint <USER@YOURDOMAIN.COM>")
-                .queryString("to", "GerasimovQA@gmail.com")
+                .queryString("to", "YOUR_EMAIL")
                 .queryString("subject", "Dates")
                 .queryString("text", "Available dates: " + message)
                 .asJson();
