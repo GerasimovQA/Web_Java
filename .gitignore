@@ -3,3 +3,5 @@
 *android*
 *target*
 */src/main/resources/*
+*.iml
+*.xml
